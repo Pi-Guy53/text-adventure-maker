@@ -11,3 +11,11 @@ footer {
     text-align: center;
     font-size: 10pt;
 }
+
+main {
+    display: grid;
+}
+
+#stage {}
+
+/*PIXI stage*/
