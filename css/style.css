@@ -14,8 +14,10 @@ footer {
 
 main {
     display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
 }
 
-#stage {}
-
 /*PIXI stage*/
+#stage {
+    grid-column: 2/3;
+}
