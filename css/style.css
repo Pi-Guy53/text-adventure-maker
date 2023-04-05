@@ -17,7 +17,33 @@ main {
     grid-template-columns: 1fr 4fr 1fr;
 }
 
+.modalDialog{
+    position: absolute;
+    transform: translateY(250px);
+
+    text-align: center;
+
+    width: 100%;
+}
+
+.modalDialog textarea
+{
+    width: 100%;
+    resize: none;
+}
+
+#modalText
+{
+    width: 75%;
+}
+
+.modalDialog-hidden
+{
+    display: none;
+}
+
 /*PIXI stage*/
 #stage {
-    grid-column: 2/3;
+    margin: auto;
+    width: 100%;
 }
