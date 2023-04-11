@@ -17,28 +17,43 @@ main {
     grid-template-columns: 1fr 4fr 1fr;
 }
 
-.modalDialog{
+.modalDialog {
     position: absolute;
     transform: translateY(250px);
 
     text-align: center;
 
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
     width: 100%;
 }
 
-.modalDialog textarea
-{
+.modalDialog textarea {
     width: 100%;
     resize: none;
+
+    grid-column: 2/4;
 }
 
-#modalText
-{
-    width: 75%;
+#modalText {
+    width: 100%;
 }
 
-.modalDialog-hidden
-{
+#modalTitle {
+    grid-column: 2/4;
+}
+
+#modalButton-save {
+    grid-column: 2/3;
+    justify-self: right;
+}
+
+#modalButton-cancel {
+    grid-column: 3/4;
+    justify-self: left;
+}
+
+.modalDialog-hidden {
     display: none;
 }
 

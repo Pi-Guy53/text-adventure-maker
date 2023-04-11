@@ -21,16 +21,25 @@
     </header>
 
     <main>
-        Working area of the body
-        <script src="main.js"></script>
-        <!-- This is dumb, but does get my stage into the middle of the body -->
 
-        <div class = "modalDialog">
-            <p id = "modalTitle"></p>
-            <textarea id="modalText" name ="modalText" rows = "25" placeholder="write some text..."></textarea>
-            <input type="button" id="modalButton-save" name = "modalButton-save" value="Save and Close">
-            <input type="button" id="modalButton-cancel" name = "modalButton-cancel" value="Close without saving">
-            
+        <script>let app = new PIXI.Application({
+                width: 800,
+                heigth: 450,
+                backgroundColor: 0xdddddd
+            }); // 16:9 * 50
+
+            app.view.id = "stage";
+            document.body.appendChild(app.view);
+        </script>
+
+        <input type="submit" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()">
+
+        <div class=" modalDialog">
+            <p id="modalTitle"></p>
+            <textarea id="modalText" name="modalText" rows="25" placeholder="write some text..."></textarea>
+            <input type="button" id="modalButton-save" name="modalButton-save" value="Save and Close">
+            <input type="button" id="modalButton-cancel" name="modalButton-cancel" value="Close without saving">
+
         </div>
 
     </main>
@@ -40,6 +49,7 @@
     </footer>
 
     <script src="Plot.js"></script>
+    <script src="main.js"></script>
 
 </body>
 
