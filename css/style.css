@@ -61,6 +61,7 @@ main {
 #stage {
     margin: auto;
     width: 100%;
+    border-radius: 2px;
 }
 
 /* context menu */

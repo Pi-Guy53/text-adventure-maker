@@ -9,6 +9,8 @@ let totalPlotLength = 0; //num of all plots ever made
 
 let contextPlotId;
 
+let offsetX = 0, offsetY = 0;
+
 //Save And Close Modal
 document.querySelector('#modalButton-save').addEventListener('click', () => {
     // console.log(modalDialog);
@@ -83,13 +85,14 @@ function addPlot(inputText) {
 
     let plotTxtStyle = new PIXI.TextStyle({
         wordWrap: true,
-        fontSize: 14
+        fontSize: 16
     });
 
     plotTitle = new PIXI.Text('~empty~', plotTxtStyle);
     plotTitle.anchor.set(.5, .5);
     plotTitle.scale.x = 1;
     plotTitle.scale.y = 1.25;
+    plotTitle.resolution = 2;
 
     //add plot to the plot list
     plotList.push(new Plot('', tId, plotS, plotTitle));
@@ -105,41 +108,76 @@ function addPlot(inputText) {
     app.stage.addChild(plotS);
 
     plotS.addEventListener("mouseup", (e) => {
-        modalDialog.className = "modalDialog";
-        tempPlotID = e.target.id;
-
-        let modalD = document.querySelector('#modalText');
-        let modalTitle = document.querySelector('#modalTitle');
-
-        let tPlot = findPlotByID(tempPlotID);
-
-        for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
-            plotList[i].sprite.tint = 0xffffff;
+        if(plotS.dragging)
+        {
+            plotS.dragging = false;
         }
+        else
+        {
+            modalDialog.className = "modalDialog";
+            tempPlotID = e.target.id;
 
-        tPlot.sprite.tint = 0xaaaaaa;
+            let modalD = document.querySelector('#modalText');
+            let modalTitle = document.querySelector('#modalTitle');
 
-        modalD.value = tPlot.text;
-        modalTitle.innerHTML = tPlot.id;
+            let tPlot = findPlotByID(tempPlotID);
 
-        //console.log(e);
+            for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
+                plotList[i].sprite.tint = 0xffffff;
+            }
+
+            tPlot.sprite.tint = 0xaaaaaa;
+
+            modalD.value = tPlot.text;
+            modalTitle.innerHTML = tPlot.id;
+        }
     });
 
     plotS.addEventListener("rightup", (e) => {
         e.preventDefault();
         showContextMenu(e.client.x, e.client.y, e.target.id);
-
-        //console.log(e.target.id);
+        
+        console.log(e);
     });
 
-    plotS.addEventListener("contextmenu", (e) => { e.preventDefault(); });
+    plotS.dragging = false;
+
+    plotS.addEventListener("mousedown", function (e) {
+        plotS.dragging = true;
+        offsetX = plotS.x - e.data.global.x;
+        offsetY = plotS.y - e.data.global.y;
+    });
+
+    //console.log(app.view.width, app.view.height);
+
+    // const h = app.stage.height;
+
+    plotS.addEventListener("mousemove", function (e) {
+        //console.log(e);
+        if (plotS.dragging) {
+            //console.log(e);
+            plotS.x = Math.min(Math.max(e.data.global.x + offsetX, 0), app.view.width);
+            plotS.y = Math.min(Math.max(e.data.global.y + offsetY, 0), app.view.height);
+
+            console.log(e.data.global.y + offsetY, plotS.x, plotS.y);
+        }
+    });
+
+    //plotS.addEventListener("contextmenu", (e) => { e.preventDefault(); });
 }
 
 //Prevent right clicks on the page for a custom context meun
 //would prefer to just add to the existing one, but not sure how to do that RN
 app.view.addEventListener("contextmenu", (e) => {
     e.preventDefault();
-    hideContextMenu();
+});
+
+app.view.addEventListener("mousedown", (e) => {
+    if(e.button == 2)
+    {
+        e.preventDefault();
+        hideContextMenu();
+    }
 });
 
 app.view.addEventListener("click", (e) => {
@@ -190,6 +228,8 @@ function showContextMenu(posX, posY, plotId) {
         hiddenContextMenu.className = 'context-wrapper';
     }
     const contextMenu = document.querySelector('.context-wrapper');
+
+    posY = window.scrollY + posY;
 
     contextMenu.innerHTML += `<style>
     .context-wrapper {
