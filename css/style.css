@@ -62,3 +62,42 @@ main {
     margin: auto;
     width: 100%;
 }
+
+/* context menu */
+
+.context-wrapper {
+    width: 100px;
+    background: #ffffff;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    margin: 0rem;
+    padding: 0rem;
+
+    box-shadow: 1px 0px 5px #777;
+}
+
+.context-wrapper-hidden {
+    display: none;
+}
+
+.context-content {
+    margin: 0rem;
+    padding: 0rem;
+}
+
+.context-menu {
+    margin: 0rem;
+    padding: 0rem;
+}
+
+.context-menu-item {
+    list-style: none;
+    background-color: #ffffff;
+    margin: .25rem;
+    padding: .125rem;
+}
+
+.context-menu :hover {
+    background-color: #f0f0f0;
+}

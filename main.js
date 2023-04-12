@@ -4,21 +4,33 @@ let modalDialog = document.getElementsByClassName("modalDialog")[0];
 modalDialog.className = "modalDialog-hidden";
 let tempPlotID;
 
-let plotList = []
+let plotList = [];
+let totalPlotLength = 0; //num of all plots ever made
 
+let contextPlotId;
+
+//Save And Close Modal
 document.querySelector('#modalButton-save').addEventListener('click', () => {
     // console.log(modalDialog);
     modalDialog.className = "modalDialog-hidden";
 
     if (tempPlotID != '') {
         let tPlot = findPlotByID(tempPlotID);
+        tPlot.sprite.tint = 0xffffff; //remove selected tint
 
         let modalD = document.querySelector('#modalText');
         let modalTitle = document.querySelector('#modalTitle');
 
-        tPlot.text = modalD.value;
+        tPlot.text = modalD.value; //set the inner text to what the user typed
+        let txt = modalD.value;
 
-        //console.log(tempPlotID);
+        if (txt.length > 0) {
+            tPlot.txtBox.text = "       " + txt.slice(0, 56).trim() + "..."; //add preview text to the plot
+        }
+        else {
+            tPlot.txtBox.text = "~empty~";
+        }
+
         console.log(tPlot.text);
 
         modalD.value = '';
@@ -27,16 +39,18 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
     }
 });
 
+//Close Without Saving Modal
 document.querySelector('#modalButton-cancel').addEventListener('click', () => {
     // console.log(modalDialog);
     modalDialog.className = "modalDialog-hidden";
 
     if (tempPlotID != '') {
+        let tPlot = findPlotByID(tempPlotID);
+        tPlot.sprite.tint = 0xffffff;//remove selected tint
+
         let modalD = document.querySelector('#modalText');
         let modalTitle = document.querySelector('#modalTitle');
 
-        //console.log(tempPlotID);
-        let tPlot = findPlotByID(tempPlotID);
         console.log(tPlot.text);
 
         modalD.value = '';
@@ -49,9 +63,11 @@ addPlot(); //TESTING
 addPlot();
 addPlot();
 
-function addPlot() {
+//creats a new plot
+function addPlot(inputText) {
     let plotS = PIXI.Sprite.from('img/plot.png');
-    let tId = "plot-" + plotList.length;
+    let tId = "plot-" + totalPlotLength;
+    totalPlotLength++;
 
     plotS.anchor.set(.5, .5);
     plotS.width = 100;
@@ -61,15 +77,30 @@ function addPlot() {
     plotS.y = 75;
 
     plotS.id = tId;
-    plotList.push(new Plot('', tId, plotS));
 
-    plotS.eventMode = 'static';
+    plotS.eventMode = 'static'; //new interaction api
     //plotS.interactive = true;
 
-    plotTitle = new PIXI.Text(tId);
-    plotTitle.anchor.set(.5, 1.5);
-    plotTitle.width = plotS.width * .5;
+    let plotTxtStyle = new PIXI.TextStyle({
+        wordWrap: true,
+        fontSize: 14
+    });
 
+    plotTitle = new PIXI.Text('~empty~', plotTxtStyle);
+    plotTitle.anchor.set(.5, .5);
+    plotTitle.scale.x = 1;
+    plotTitle.scale.y = 1.25;
+
+    //add plot to the plot list
+    plotList.push(new Plot('', tId, plotS, plotTitle));
+
+
+    if (inputText != null) {
+        plotTitle.text = "       " + inputText.slice(0, 56).trim() + "...";
+        findPlotByID(tId).text = inputText;
+    }
+
+    //add children
     plotS.addChild(plotTitle);
     app.stage.addChild(plotS);
 
@@ -82,28 +113,41 @@ function addPlot() {
 
         let tPlot = findPlotByID(tempPlotID);
 
+        for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
+            plotList[i].sprite.tint = 0xffffff;
+        }
+
+        tPlot.sprite.tint = 0xaaaaaa;
+
         modalD.value = tPlot.text;
         modalTitle.innerHTML = tPlot.id;
 
         //console.log(e);
     });
 
-    plotS.addEventListener("rightdown", (e) => {
+    plotS.addEventListener("rightup", (e) => {
         e.preventDefault();
-        console.log(e);
+        showContextMenu(e.client.x, e.client.y, e.target.id);
 
-        //input custom menu
+        //console.log(e.target.id);
     });
+
+    plotS.addEventListener("contextmenu", (e) => { e.preventDefault(); });
 }
 
 //Prevent right clicks on the page for a custom context meun
 //would prefer to just add to the existing one, but not sure how to do that RN
-document.addEventListener("contextmenu", (e) => {
+app.view.addEventListener("contextmenu", (e) => {
     e.preventDefault();
-
-    //input custom menu
+    hideContextMenu();
 });
 
+app.view.addEventListener("click", (e) => {
+    e.preventDefault();
+    hideContextMenu();
+});
+
+//deletes the specified plot
 function deletePlot(id) {
 
     console.log(plotList);
@@ -118,6 +162,7 @@ function deletePlot(id) {
     renderPlots();
 }
 
+//finds a plot using the given id
 function findPlotByID(id) {
     for (let i = 0; i < plotList.length; i++) {
         if (plotList[i].id == id) {
@@ -128,11 +173,66 @@ function findPlotByID(id) {
     return false;
 }
 
+//render the plots into a grid //Will be removed once I had custom plot positions
 function renderPlots() {
     for (let i = 0; i < plotList.length; i++) {
         plotList[i].sprite.x = 60 + (i * 110);
         plotList[i].sprite.y = 75;
     }
+}
+
+//ContextMenu functions
+function showContextMenu(posX, posY, plotId) {
+    contextPlotId = plotId;
+
+    const hiddenContextMenu = document.querySelector('.context-wrapper-hidden');
+    if (hiddenContextMenu != null) {
+        hiddenContextMenu.className = 'context-wrapper';
+    }
+    const contextMenu = document.querySelector('.context-wrapper');
+
+    contextMenu.innerHTML += `<style>
+    .context-wrapper {
+        position: absolute;
+        left: ${posX}px;
+        top: ${posY}px;
+    }
+    </style>`;
+}
+
+function hideContextMenu() {
+    const contextMenu = document.querySelector('.context-wrapper');
+
+    if (contextMenu != null) {
+        contextMenu.className = 'context-wrapper-hidden';
+    }
+}
+
+function contextDuplicate() {
+    if (contextPlotId != -1) {
+        //console.log('duplicated');
+    }
+
+    hideContextMenu();
+    contextPlotId = -1;
+}
+
+function contextEdit() {
+    if (contextPlotId != -1) {
+        //console.log('edited');
+    }
+
+    hideContextMenu();
+    contextPlotId = -1;
+}
+
+function contextDelete() {
+    if (contextPlotId != -1) {
+        //console.log('deleted');
+    }
+
+    hideContextMenu();
+    contextPlotId = -1;
 }
 
 console.log(plotList);
