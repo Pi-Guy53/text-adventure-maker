@@ -33,8 +33,13 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
         tPlot.text = modalD.value; //set the inner text to what the user typed
         let txt = modalD.value;
 
+        if (modalTitle.value != '' && isUnique(modalTitle.value)) {
+            tPlot.id = modalTitle.value;
+            tPlot.sprite.id = modalTitle.value;
+        }
+
         //if (txt.length > 0) {
-        tPlot.txtBox.text = tempPlotID;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
+        tPlot.txtBox.text = tPlot.id;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
         //}
         //else {
         //    tPlot.txtBox.text = "~empty~";
@@ -43,10 +48,19 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
         console.log(tPlot.text);
 
         modalD.value = '';
-        modalTitle.innerHTML = '';
+        modalTitle.value = '';
         tempPlotID = '';
     }
 });
+
+function isUnique(str) {
+
+    if (findPlotByID(str) == false) {
+        return true;
+    }
+
+    return false;
+}
 
 //Close Without Saving Modal
 document.querySelector('#modalButton-cancel').addEventListener('click', () => {
@@ -63,7 +77,7 @@ document.querySelector('#modalButton-cancel').addEventListener('click', () => {
         console.log(tPlot.text);
 
         modalD.value = '';
-        modalTitle.innerHTML = '';
+        modalTitle.value = '';
         tempPlotID = '';
     }
 });
@@ -73,9 +87,17 @@ addPlot();
 addPlot();
 
 //creats a new plot
-function addPlot(inputText) {
+function addPlot(inputText, inputId) {
     let plotS = PIXI.Sprite.from('img/plot.png');
-    let tId = "plot-" + totalPlotLength;
+    let tId
+
+    if (inputId != null) {
+        tId = inputId;
+    }
+    else {
+        tId = "plot-" + totalPlotLength;
+    }
+
     totalPlotLength++;
 
     plotS.anchor.set(.5, .5);
@@ -95,7 +117,7 @@ function addPlot(inputText) {
         fontSize: 16
     });
 
-    plotTitle = new PIXI.Text('~empty~', plotTxtStyle);
+    plotTitle = new PIXI.Text(tId, plotTxtStyle);
     plotTitle.anchor.set(.5, .5);
     plotTitle.scale.x = 1;
     plotTitle.scale.y = 1.25;
@@ -104,10 +126,11 @@ function addPlot(inputText) {
     //add plot to the plot list
     plotList.push(new Plot('', tId, plotS, plotTitle));
 
-    //if (inputText != null) {
-    plotTitle.text = tId;//"       " + inputText.slice(0, plotPreviewLength).trim() + "...";
-    findPlotByID(tId).text = inputText;
-    //}
+    plotTitle.value = tId;
+    if (inputText != null) {
+        // plotTitle.text = tId;//"       " + inputText.slice(0, plotPreviewLength).trim() + "...";
+        findPlotByID(tId).text = inputText;
+    }
 
     //add children
     plotS.addChild(plotTitle);
@@ -135,7 +158,7 @@ function addPlot(inputText) {
             tPlot.sprite.tint = 0xaaaaaa;
 
             modalD.value = tPlot.text;
-            modalTitle.innerHTML = tPlot.id;
+            modalTitle.value = tPlot.id;
         }
     });
 
@@ -209,7 +232,6 @@ app.view.addEventListener("click", (e) => {
 
 //deletes the specified plot
 function deletePlot(id) {
-
     console.log(plotList);
 
     const removedPlot = plotList.find(item => item.id == id);
@@ -220,6 +242,14 @@ function deletePlot(id) {
     console.log(plotList);
 
     renderPlots();
+}
+
+function deleteAllPlots() {
+    for (let i = 0; i < plotList.length; i++) {
+        app.stage.removeChild(plotList[i].sprite);
+    }
+
+    plotList = [];
 }
 
 //finds a plot using the given id
@@ -277,10 +307,13 @@ function contextNew(e) {
 
     let tPlot = plotList[plotList.length - 1];
 
-    console.log(app.stage.x);
+    log(e);
 
-    tPlot.sprite.x = e.x;
-    tPlot.sprite.y = window.scrollY + e.y;
+    let x = lerp(e.clientX, 0, screen.width, 0, app.view.width);
+    let y = lerp(e.clientY, 0, screen.height, 0, app.view.height);
+
+    tPlot.sprite.x = x;
+    tPlot.sprite.y = y;
 
     hideContextMenu();
 }
@@ -288,7 +321,12 @@ function contextNew(e) {
 function contextDuplicate() {
     if (contextPlotId != -1 && contextPlotId != 'stage') {
         //console.log('duplicated');
-        addPlot(findPlotByID(contextPlotId).text);
+        let selectedPlot = findPlotByID(contextPlotId)
+        addPlot(selectedPlot.text);
+
+        let newPlot = plotList[plotList.length - 1]
+        newPlot.sprite.x = selectedPlot.sprite.x + 25;
+        newPlot.sprite.y = selectedPlot.sprite.y + 25;
     }
 
     hideContextMenu();
@@ -313,7 +351,7 @@ function contextEdit() {
         tPlot.sprite.tint = 0xaaaaaa;
 
         modalD.value = tPlot.text;
-        modalTitle.innerHTML = tPlot.id;
+        modalTitle.value = tPlot.id;
     }
 
     hideContextMenu();
@@ -432,12 +470,39 @@ function showNewPlot(newPlotId) {
 
 }
 
+let loadPlotList = [];
+
 function loadFromSave() {
-    plotList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY)) || [];
+    deleteAllPlots();
+
+    for (let i = app.stage.children.length; i > 0; i--) {
+        app.stage.removeChild(app.stage.children[0]);
+    }
+
+    loadPlotList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY)) || [];
+
+    pullPlotsFromLoad();
+}
+
+function pullPlotsFromLoad() {
+    for (let i = 0; i < loadPlotList.length; i++) {
+        addPlot(loadPlotList[i].text, loadPlotList[i].id);
+        console.log(plotList[i]);
+    }
 }
 
 function save() {
-    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(plotList));
+    log(plotList);
+
+    let arr = plotList;
+
+    for (let i = 0; i < arr.length; i++) {
+        arr[i].sprite = null;
+        arr[i].txtBox = null;
+    }
+
+    log(JSON.stringify(arr));
+    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(arr));
 }
 
 

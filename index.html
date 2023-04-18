@@ -40,8 +40,14 @@
         <!-- <a href="showStory.html">To story preview</a> -->
 
         <div class=" modalDialog">
-            <p id="modalTitle"></p>
-            <textarea id="modalText" name="modalText" rows="25" placeholder="write some text..."></textarea>
+            <!-- <p id="modalTitle"></p> -->
+            <input type="text" id="modalTitle" name="modalTitle" value=""
+                placeholder="Title, used for selecting plots, cannot be empty, must be unique">
+
+            <textarea id="modalText" name="modalText" rows="25" placeholder="write some text...
+using <<display text::plot title>> will allow you to create a link between plots.
+clicking the 'display text' will take to user to the plot titled 'plot title' 
+<<, >>, and :: are reserved character configurations (subject to change)"></textarea>
             <input type="button" id="modalButton-save" name="modalButton-save" value="Save and Close">
             <input type="button" id="modalButton-cancel" name="modalButton-cancel" value="Close without saving">
 

@@ -41,6 +41,10 @@ main {
 
 #modalTitle {
     grid-column: 2/4;
+    font-size: 16pt;
+    font-weight: bold;
+
+    text-align: center;
 }
 
 #modalButton-save {
