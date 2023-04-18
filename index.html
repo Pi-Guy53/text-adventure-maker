@@ -31,10 +31,13 @@
             document.body.appendChild(app.view);
         </script>
 
-        <input type="submit" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()">
-        <input type="submit" id="preview" name="preview" value="Compile preview" onclick="setPreview()">
+        <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
+        <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()">
 
-        <a href="showStory.html">To story preview</a>
+        <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
+        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save()">
+
+        <!-- <a href="showStory.html">To story preview</a> -->
 
         <div class=" modalDialog">
             <p id="modalTitle"></p>

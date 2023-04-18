@@ -16,6 +16,8 @@ let mouseDown = false;
 
 let plotPreviewLength = 50;
 
+const LOCAL_STORAGE_PLOT_SAVE_LIST_KEY = 'storyPlots.list';
+
 //Save And Close Modal
 document.querySelector('#modalButton-save').addEventListener('click', () => {
     // console.log(modalDialog);
@@ -31,12 +33,12 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
         tPlot.text = modalD.value; //set the inner text to what the user typed
         let txt = modalD.value;
 
-        if (txt.length > 0) {
-            tPlot.txtBox.text = "       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
-        }
-        else {
-            tPlot.txtBox.text = "~empty~";
-        }
+        //if (txt.length > 0) {
+        tPlot.txtBox.text = tempPlotID;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
+        //}
+        //else {
+        //    tPlot.txtBox.text = "~empty~";
+        //}
 
         console.log(tPlot.text);
 
@@ -102,10 +104,10 @@ function addPlot(inputText) {
     //add plot to the plot list
     plotList.push(new Plot('', tId, plotS, plotTitle));
 
-    if (inputText != null) {
-        plotTitle.text = "       " + inputText.slice(0, plotPreviewLength).trim() + "...";
-        findPlotByID(tId).text = inputText;
-    }
+    //if (inputText != null) {
+    plotTitle.text = tId;//"       " + inputText.slice(0, plotPreviewLength).trim() + "...";
+    findPlotByID(tId).text = inputText;
+    //}
 
     //add children
     plotS.addChild(plotTitle);
@@ -375,8 +377,8 @@ function runCommand(str, tPlot) {
     log(str);
     str = str.split('::');
 
-    str[0].trim();
-    str[1].trim();
+    str[0] = str[0].trim();
+    str[1] = str[1].trim();
 
     tPlot.links.push({ display: str[0], link: str[1] });
 
@@ -385,13 +387,21 @@ function runCommand(str, tPlot) {
 
 function setPreview() {
     log('generating preview');
-    parseTextForCmd('plot-0');
+
+    for (let i = 0; i < plotList.length; i++) {
+        plotList[i].links = [];
+        parseTextForCmd(plotList[i].id);
+    }
 
     showNewPlot('plot-0');
 }
 
 function showNewPlot(newPlotId) {
+
+    //parseTextForCmd(newPlotId);
     let storyText = document.querySelector('#text-content');
+    let storyHeader = document.querySelector('#text-title');
+
     let cIndex = 0;
     let cmd = false;
 
@@ -399,6 +409,9 @@ function showNewPlot(newPlotId) {
     let txt = tPlot.text;
 
     storyText.innerHTML = '';
+    storyHeader.innerHTML = tPlot.id;
+
+    console.log(txt);
 
     for (let i = 0; i < tPlot.text.length; i++) {
         if (txt[i] == '<' && txt[i + 1] == '<') {
@@ -413,9 +426,18 @@ function showNewPlot(newPlotId) {
             cmd = false;
             storyText.innerHTML += `<span class ="plotLink" onclick = 'showNewPlot("${tPlot.links[cIndex].link}")'> ${tPlot.links[cIndex].display} </span>`;
             cIndex++;
+            i++;
         }
     }
 
+}
+
+function loadFromSave() {
+    plotList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY)) || [];
+}
+
+function save() {
+    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(plotList));
 }
 
 
