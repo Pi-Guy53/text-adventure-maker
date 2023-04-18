@@ -11,7 +11,6 @@
     <script src="https://pixijs.download/release/pixi.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="favicon-v1.png">
 
-
 </head>
 
 <body>
@@ -33,6 +32,9 @@
         </script>
 
         <input type="submit" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()">
+        <input type="submit" id="preview" name="preview" value="Compile preview" onclick="setPreview()">
+
+        <a href="showStory.html">To story preview</a>
 
         <div class=" modalDialog">
             <p id="modalTitle"></p>
@@ -46,16 +48,26 @@
             <div class="context-content">
                 <ul class="context-menu">
                     <li class="context-menu-item">
-                        <span onclick="contextDuplicate()">Duplicate</span>
+                        <div onclick="contextNew(event)">New</div>
                     </li>
                     <li class="context-menu-item">
-                        <span onclick="contextEdit()">Edit</span>
+                        <div onclick="contextDuplicate()">Duplicate</div>
                     </li>
                     <li class="context-menu-item">
-                        <span onclick="contextDelete()">Delete</span>
+                        <div onclick="contextEdit()">Edit</div>
+                    </li>
+                    <li class="context-menu-item">
+                        <div onclick="contextDelete()">Delete</div>
                     </li>
                 </ul>
             </div>
+        </div>
+
+        <div id="text-wrapper">
+            <h1 id="text-title"> Header</h1>
+            <p id="text-content">
+                Content
+            </p>
         </div>
 
     </main>

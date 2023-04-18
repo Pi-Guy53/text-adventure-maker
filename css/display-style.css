@@ -1,0 +1,17 @@
+#text-wrapper {
+    background-color: hsl(34, 44%, 90%);
+    height: 50rem;
+    border-radius: 25px;
+
+    padding: 1rem;
+    margin: 1rem;
+}
+
+#text-title {
+    text-align: center;
+    padding: 1rem;
+}
+
+#text-content {
+    padding: 1rem;
+}

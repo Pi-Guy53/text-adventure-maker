@@ -102,3 +102,35 @@ main {
 .context-menu :hover {
     background-color: #f0f0f0;
 }
+
+/*Preivew CSS*/
+#text-wrapper {
+    background-color: hsl(34, 44%, 90%);
+    /* height: 50rem; */
+    width: 100%;
+    border-radius: 25px;
+
+    padding: 1rem;
+    margin: 1rem;
+}
+
+#text-title {
+    text-align: center;
+    padding: 1rem;
+}
+
+#text-content {
+    padding: 1rem;
+}
+
+.plotLink {
+    text-decoration: underline;
+    color: #000055;
+}
+
+.plotLink:hover {
+    text-decoration: underline;
+    color: #0000aa;
+
+    cursor: pointer;
+}

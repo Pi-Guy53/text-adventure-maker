@@ -1,11 +1,10 @@
 class Plot {
-    constructor(text, id, sprite, txtBox, x, y) {
+    constructor(text, id, sprite, txtBox, links) {
         this.text = text,
-        this.id = id,
-        this.sprite = sprite,
-        this.txtBox = txtBox,
-        this.x = x,
-        this.y = y,
-        this.dragging = false
+            this.id = id,
+            this.sprite = sprite,
+            this.txtBox = txtBox,
+            this.links = [],
+            this.dragging = false
     }
 }
