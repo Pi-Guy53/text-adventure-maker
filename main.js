@@ -34,9 +34,52 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
         let txt = modalD.value;
 
         if (modalTitle.value != '' && isUnique(modalTitle.value)) {
+
             tPlot.id = modalTitle.value;
             tPlot.sprite.id = modalTitle.value;
         }
+
+        log('~~~~~check');
+
+        // for (let i = 0; i < plotList.length; i++) {
+        //     let tempText = '';
+        //     tempText = plotList[i].text;
+        //     tempText = tempText.split('::'); //split at the links
+
+        //     //log(tempText);
+
+        //     plotList[i].text = '';
+
+        //     for (let g = 0; g < tempText.length; g++) {
+        //         tempText[g] = tempText[g].split('>>');
+
+        //         log(tempText[g]);
+
+        //         if (tempText[g][0] == tempPlotID) {
+        //             tempText[g][0] = `::${modalTitle.value}>>`;
+        //             log(tempText[g], "found");
+        //         }
+
+        //         plotList[i].text += tempText[g];
+        //     }
+
+
+        //     log(tempText, "temp");
+        // }
+
+        //log(tempText);
+        // for (let i = 0; i < plotList.length; i++) {
+        //     for (let l = 0; l < plotList[i].links.length; l++) {
+
+        //         if (plotList[i].links[l].link == tempPlotID) {
+        //             plotList[i].links[l].link = modalTitle.value;
+
+        //             console.log(plotList[i].links[l].link);
+        //         }
+        //     }
+        // }
+
+        log('~~~~~End check');
 
         //if (txt.length > 0) {
         tPlot.txtBox.text = tPlot.id;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
@@ -429,7 +472,9 @@ function runCommand(str, tPlot) {
     str[0] = str[0].trim();
     str[1] = str[1].trim();
 
-    tPlot.links.push({ display: str[0], link: str[1] });
+    if (findPlotByID(str[1]) != false) {
+        tPlot.links.push({ display: str[0], link: str[1] });
+    }
 
     log(tPlot.links[tPlot.links.length - 1]);
 }
