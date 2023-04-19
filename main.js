@@ -33,53 +33,44 @@ document.querySelector('#modalButton-save').addEventListener('click', () => {
         tPlot.text = modalD.value; //set the inner text to what the user typed
         let txt = modalD.value;
 
+        log('~~~~~check');
+
         if (modalTitle.value != '' && isUnique(modalTitle.value)) {
 
             tPlot.id = modalTitle.value;
             tPlot.sprite.id = modalTitle.value;
+
+            for (let i = 0; i < plotList.length; i++) {
+                for(let l = 0; l < plotList[i].links.length; l++)
+                {
+                    if(plotList[i].links[l].link == tempPlotID)
+                    {
+                        let tempLText ='';
+
+                        let tx1 = plotList[i].text.slice(0, plotList[i].links[l].linkStart);
+                        let tx2 = plotList[i].text.slice(plotList[i].links[l].linkStart, plotList[i].links[l].linkEnd);
+                        let tx3 = plotList[i].text.slice(plotList[i].links[l].linkEnd, plotList[i].text.length);
+
+                        tx2 = tx2.split('::')[0] + '::';
+
+                        // log(tx1);
+                        // log(tx2);
+                        // log(tx3); 
+                        // log('slices!!');
+
+                        tempLText = tx1 + tx2 + modalTitle.value + tx3;
+                        // log(tempLText);
+                        plotList[i].text = tempLText;
+                    }
+                }
+            }
+        }
+        else if(modalTitle.value != tPlot.id){
+            alert("A Plot's title must be unique and cannot be empty");
         }
 
-        log('~~~~~check');
-
-        // for (let i = 0; i < plotList.length; i++) {
-        //     let tempText = '';
-        //     tempText = plotList[i].text;
-        //     tempText = tempText.split('::'); //split at the links
-
-        //     //log(tempText);
-
-        //     plotList[i].text = '';
-
-        //     for (let g = 0; g < tempText.length; g++) {
-        //         tempText[g] = tempText[g].split('>>');
-
-        //         log(tempText[g]);
-
-        //         if (tempText[g][0] == tempPlotID) {
-        //             tempText[g][0] = `::${modalTitle.value}>>`;
-        //             log(tempText[g], "found");
-        //         }
-
-        //         plotList[i].text += tempText[g];
-        //     }
-
-
-        //     log(tempText, "temp");
-        // }
-
-        //log(tempText);
-        // for (let i = 0; i < plotList.length; i++) {
-        //     for (let l = 0; l < plotList[i].links.length; l++) {
-
-        //         if (plotList[i].links[l].link == tempPlotID) {
-        //             plotList[i].links[l].link = modalTitle.value;
-
-        //             console.log(plotList[i].links[l].link);
-        //         }
-        //     }
-        // }
-
         log('~~~~~End check');
+    
 
         //if (txt.length > 0) {
         tPlot.txtBox.text = tPlot.id;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
@@ -135,7 +126,7 @@ addPlot();
 
 //creats a new plot
 function addPlot(inputText, inputId) {
-    let plotS = PIXI.Sprite.from('img/plot.png');
+    let plotS = PIXI.Sprite.from('img/plot-white.png');
     let tId
 
     if (inputId != null) {
@@ -222,33 +213,29 @@ function addPlot(inputText, inputId) {
 
     plotS.addEventListener("mousedown", function (e) {
         mouseDown = true;
-        setTimeout(() => {
-            if (mouseDown) {
-                plotS.dragging = true;
-                app.stage.removeChild(plotS);
-                app.stage.addChild(plotS);
-            }
-        }, 75);
+        // setTimeout(() => {
+        //     if (mouseDown) {
+        //         plotS.dragging = true;
+        //         app.stage.removeChild(plotS);
+        //         app.stage.addChild(plotS);
+        //     }
+        // }, 75);
 
-        offsetX = 0;//plotS.x - e.data.global.x;
-        offsetY = 0;//plotS.y - e.data.global.y;
+        // offsetX = 0;//plotS.x - e.data.global.x;
+        // offsetY = 0;//plotS.y - e.data.global.y;
     });
 
-    plotS.addEventListener('mouseout', (e) => {
-        if (plotS.dragging) {
-            plotS.dragging = false;
-            mouseDown = false;
-        }
-    });
-
-    //console.log(app.view.width, app.view.height);
-
-    // const h = app.stage.height;
+    // plotS.addEventListener('mouseout', (e) => {
+    //     if (plotS.dragging) {
+    //         plotS.dragging = false;
+    //         mouseDown = false;
+    //     }
+    // });
 
     plotS.addEventListener("mousemove", function (e) {
         //console.log(e);
 
-        if (plotS.dragging) {
+        if (mouseDown) { //plotS.dragging
             //console.log(e);
             plotS.x = Math.min(Math.max(e.data.global.x + offsetX, 0), app.view.width);
             plotS.y = Math.min(Math.max(e.data.global.y + offsetY, 0), app.view.height);
@@ -256,13 +243,13 @@ function addPlot(inputText, inputId) {
             p.x = plotS.x;
             p.y = plotS.y;
 
+            plotS.dragging = true;
+
             drawAllLines();
 
             //console.log(e.data.global.y + offsetY, plotS.x, plotS.y);
         }
     });
-
-    //plotS.addEventListener("contextmenu", (e) => { e.preventDefault(); });
 }
 
 //Prevent right clicks on the page for a custom context meun
@@ -294,8 +281,6 @@ function deletePlot(id) {
     app.stage.removeChild(removedPlot.sprite);
 
     console.log(plotList);
-
-    renderPlots();
 }
 
 function deleteAllPlots() {
@@ -356,15 +341,27 @@ function hideContextMenu() {
     }
 }
 
+app.stage.eventMode = 'static';
+app.stage.hitArea = app.screen;
+
+let x;
+let y;
+
+app.stage.addEventListener('mousemove', (e) => {
+    // log(e.global.x, e.global.y);
+    x = e.global.x;
+    y = e.global.y;
+});
+
 function contextNew(e) {
     addPlot();
 
     let tPlot = plotList[plotList.length - 1];
 
-    log(e);
+    //log(e);
 
-    let x = lerp(e.clientX, 0, screen.width, 0, app.view.width);
-    let y = lerp(e.clientY, 0, screen.height, 0, app.view.height);
+    // let x = lerp(e.clientX, 0, screen.width, app.x, app.view.width);
+    // let y = lerp(e.clientY, 0, screen.height, app.y, app.view.height);
 
     tPlot.sprite.x = x;
     tPlot.sprite.y = y;
@@ -408,6 +405,8 @@ function contextEdit() {
         modalTitle.value = tPlot.id;
     }
 
+    setPreview();
+
     hideContextMenu();
     contextPlotId = -1;
 }
@@ -424,6 +423,8 @@ function contextDelete() {
 
     hideContextMenu();
     contextPlotId = -1;
+
+    setPreview();
 }
 
 function lerp(p, a1, a2, b1, b2) {
@@ -458,25 +459,32 @@ function parseTextForCmd(plotIdtoParse) {
 
         if (txt[i] == '>' && txt[i + 1] == '>') {
             cmdE = i;
-            runCommand(txt.slice(cmdS, cmdE), tPlot);
+            runCommand(txt.slice(cmdS, cmdE), tPlot, cmdS, cmdE);
         }
     }
 
     //log(txt);
 }
 
-function runCommand(str, tPlot) {
-    log(str);
+function runCommand(str, tPlot, cS, cE) {
+    //log(str);
     str = str.split('::');
 
     str[0] = str[0].trim();
     str[1] = str[1].trim();
 
+    log(str); 
+
     if (findPlotByID(str[1]) != false) {
-        tPlot.links.push({ display: str[0], link: str[1] });
+        tPlot.links.push({ display: str[0], link: str[1], linkStart: cS, linkEnd: cE});
+    }
+    else{
+        tPlot.links.push({ display: str[0], link: -99, linkStart: cS, linkEnd: cE});
     }
 
-    log(tPlot.links[tPlot.links.length - 1]);
+    log(str);
+
+    log(tPlot.links[tPlot.links.length - 1], '~~~~~~~~~~~~~~~~~~~~~~~~~');
 }
 
 function setPreview() {
@@ -485,7 +493,15 @@ function setPreview() {
     for (let i = 0; i < plotList.length; i++) {
         plotList[i].links = [];
         parseTextForCmd(plotList[i].id);
+        //log(plotList[i].links, "links", i);
     }
+
+    for(let i = 0; i < plotList.length; i++)
+    {
+        plotList[i].sprite.tint = 0xffffff;
+    }
+
+    plotList[0].sprite.tint= 0xffff00;
 
     showNewPlot(plotList[0].id); //!NEED TO MAKE DYNAMIC
     drawAllLines();
@@ -494,35 +510,39 @@ function setPreview() {
 let lineArr = [];
 
 function drawConnectingLine(a, b) {
-    let line = new PIXI.Graphics();
-    line.lineStyle(2, 0x446644);
 
-    let hd = b.x - a.x;
-    let vd = b.y - a.y;
+    if(a != null && b != null)
+    {
+        let line = new PIXI.Graphics();
+        line.lineStyle(3, 0x003300);
 
-    let s = Math.sign(hd);
+        let hd = b.x - a.x;
+        let vd = b.y - a.y;
 
-    line.moveTo(a.x + (s * 10), a.y);
+        let s = Math.sign(hd);
 
-    //draw to center
-    line.lineTo(a.x + (s * 10), a.y + (vd / 2));
-    line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
+        line.moveTo(a.x + (s * 10), a.y);
 
-    //draw arrow
-    line.lineStyle(2, 0x778877);
-    line.lineTo(a.x + ((hd - (s * 10)) / 2), a.y + ((vd + 10) / 2));
-    line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
-    line.lineTo(a.x + ((hd - (s * 10)) / 2), a.y + ((vd - 10) / 2));
-    line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
-    line.lineStyle(2, 0x446644);
+        //draw to center
+        line.lineTo(a.x + (s * 10), a.y + (vd / 2));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
 
-    //draw to end
-    line.lineTo(a.x + hd, a.y + (vd / 2));
-    line.lineTo(a.x + hd, a.y + vd);
+        //draw arrow
+        line.lineStyle(3, 0x336633);
+        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd + 15) / 2));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
+        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd - 15) / 2));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
+        line.lineStyle(3, 0x003300);
 
-    lineArr.push(line);
+        //draw to end
+        line.lineTo(a.x + hd, a.y + (vd / 2));
+        line.lineTo(a.x + hd, a.y + vd);
 
-    app.stage.addChild(line);
+        lineArr.push(line);
+
+        app.stage.addChild(line);
+    }
 }
 
 function destroyAllLines() {
@@ -570,8 +590,7 @@ function showNewPlot(newPlotId) {
 
     console.log(txt);
 
-    let lineCheck = txt.split("\n");
-    log(lineCheck);
+    let linkedList = '';
 
     for (let i = 0; i < tPlot.text.length; i++) {
         if (txt[i] == '<' && txt[i + 1] == '<') {
@@ -579,23 +598,33 @@ function showNewPlot(newPlotId) {
         }
 
         if (!cmd) {
-            storyText.innerHTML += txt[i];
-
-            for (let l = 0; l < lineCheck.length; l++) {
-                if (i == lineCheck[l].length) {
-                    storyText.innerHTML += '</p><p>';
-                }
-            }
+            linkedList += txt[i];
         }
+
+        // for (let l = 0; l < lineCheck.length; l++) {
+        //     if (i == lineCheck[l].length) {
+        //         storyText.innerHTML += '</p><p>';
+        //     }
+        // }
 
         if (cmd == true && txt[i] == '>' && txt[i + 1] == '>') {
             cmd = false;
-            storyText.innerHTML += ` <span class ="plotLink" onclick = 'showNewPlot("${tPlot.links[cIndex].link}")'> ${tPlot.links[cIndex].display} </span>`;
+
+            if(tPlot.links[cIndex].link != -99)
+            {
+                linkedList += `<span class ="plotLink" onclick = 'showNewPlot("${tPlot.links[cIndex]?.link}")'> ${tPlot.links[cIndex]?.display} </span>`;
+            }
+            else{
+                linkedList += `<span> ${tPlot.links[cIndex]?.display} </span>`;
+            }
+
             cIndex++;
             i++;
         }
     }
 
+    let lineCheck = linkedList.split("\n").join('<br>');
+    storyText.innerHTML = lineCheck;
 }
 
 let loadPlotList = [];
@@ -613,6 +642,19 @@ function loadFromSave() {
     setPreview();
 }
 
+function loadFromUserSaveInput(userInput) {
+    deleteAllPlots();
+
+    for (let i = app.stage.children.length; i > 0; i--) {
+        app.stage.removeChild(app.stage.children[0]);
+    }
+
+    loadPlotList = JSON.parse(userInput) || [];
+
+    pullPlotsFromLoad();
+    setPreview();
+}
+
 function pullPlotsFromLoad() {
     for (let i = 0; i < loadPlotList.length; i++) {
         addPlot(loadPlotList[i].text, loadPlotList[i].id);
@@ -623,7 +665,7 @@ function pullPlotsFromLoad() {
         tPlot.x = loadPlotList[i].x;
         tPlot.y = loadPlotList[i].y;
 
-        console.log(loadPlotList[i].x, loadPlotList[i].y);
+        //console.log(loadPlotList[i].x, loadPlotList[i].y);
     }
 }
 
@@ -637,10 +679,49 @@ function save() {
         arr[i].txtBox = null;
     }
 
-    log(plotList);
+    //log(plotList);
 
-    log(JSON.stringify(arr));
+    //log(JSON.stringify(arr));
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(arr));
 
     loadFromSave();
+}
+
+function downloadSave()
+{
+    save();
+
+    download('save', localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY));
+}
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+function droppedFile()
+{
+    const [file] = document.querySelector("input[type=file]").files;
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => 
+    {
+        //console.log(reader.result);
+        loadFromUserSaveInput(reader.result);
+
+    });
+
+    if(file)
+    {
+        reader.readAsText(file);
+    }
+
 }

@@ -15,12 +15,23 @@
 
 <body>
     <a href="index.html">Back to Editing</a>
+    <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
 
     <div id="text-wrapper">
         <h1 id="text-title"> Header</h1>
         <p id="text-content">
             Content
         </p>
+    </div>
+
+    <div class="modalDialog">
+        <!-- <p id="modalTitle"></p> -->
+        <input type="text" id="modalTitle" name="modalTitle" value=""
+            placeholder="Title, used for selecting plots, cannot be empty, must be unique" onclick="select()">
+
+        <textarea id="modalText" name="modalText"></textarea>
+        <input type="button" id="modalButton-save" name="modalButton-save" value="">
+        <input type="button" id="modalButton-cancel" name="modalButton-cancel" value="">
     </div>
 
     <script>let app = new PIXI.Application({
@@ -32,6 +43,10 @@
         app.view.id = "stage";
         document.body.appendChild(app.view);
     </script>
+
+    <footer>
+        &copy; 2023 UsrnGamesInc, All Rights Reserved
+    </footer>
 
     <script src="Plot.js"></script>
     <script src="main.js"></script>

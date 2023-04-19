@@ -1,7 +1,27 @@
+:root {
+    --tan-100: 34, 44%, 20%;
+    --tan-200: 34, 44%, 30%;
+    --tan-300: 34, 44%, 45%;
+    --tan-400: 34, 44%, 60%;
+    --tan-500: 34, 44%, 80%;
+    --tan-600: 34, 44%, 90%;
+
+    --background-100: 195 75% 86%;
+}
+
+body
+{
+    background-color: hsl(var(--tan-500));
+    font-size: 16pt;
+}
+
 #text-wrapper {
-    background-color: hsl(34, 44%, 90%);
+    background-color: hsl(var(--tan-400));
     height: 50rem;
     border-radius: 25px;
+
+    justify-self: center;
+    grid-column: 2/3;
 
     padding: 1rem;
     margin: 1rem;
@@ -10,8 +30,47 @@
 #text-title {
     text-align: center;
     padding: 1rem;
+    margin: 0rem;
 }
 
 #text-content {
-    padding: 1rem;
+    padding: 2rem;
+    line-height: 110%;
+
+    margin: 1rem;
+
+    background-color: hsl(var(--tan-500));
+
+    height: 75%;
+    border-radius: 25px;
+    border: 1px solid black;
+}
+
+.plotLink {
+    text-decoration: underline;
+    color: #000055;
+}
+
+.plotLink:hover {
+    text-decoration: underline;
+    color: #0000aa;
+
+    cursor: pointer;
+}
+
+.modalDialog {
+    display: none;
+}
+
+.modalDialog-hidden {
+    display: none;
+}
+
+canvas{
+    display: none;
+}
+
+footer {
+    text-align: center;
+    font-size: 10pt;
 }

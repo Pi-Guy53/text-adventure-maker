@@ -1,10 +1,24 @@
+:root {
+    --tan-100: 34, 44%, 20%;
+    --tan-200: 34, 44%, 30%;
+    --tan-300: 34, 44%, 45%;
+    --tan-400: 34, 44%, 60%;
+    --tan-500: 34, 44%, 80%;
+    --tan-600: 34, 44%, 90%;
+
+    --background-100: 195 75% 86%;
+}
+
 header {
     text-align: center;
+    color: black;
 }
 
 body {
     font-size: 14pt;
     padding: 1rem;
+
+    background-color: hsl(var(--tan-500));
 }
 
 footer {
@@ -14,7 +28,65 @@ footer {
 
 main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.btn
+{
+    margin: 1rem;
+    background-color: hsl(var(--tan-200));
+    color: white;
+    
+    font-size: 14pt;
+
+    border: 3px ridge black;
+
+    border-radius: 3px;;
+}
+
+.btn:hover{
+    margin: 1rem;
+    background-color: hsl(var(--tan-300));
+    color: white;
+
+    border: 3px groove black;
+
+    border-radius: 3px;;
+}
+
+#toPreview
+{
+    border: 1px solid black;
+    border-radius: 3px;
+
+    text-align: center;
+    align-self: center;
+
+    background-color: hsl(var(--tan-600));
+}
+
+#dropzone
+{
+    grid-column: 5/6;
+    grid-row: 2/3;
+    margin: 1rem;
+
+    padding: .5rem;
+    text-overflow:ellipsis;
+
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#dropzone-overlay
+{
+    grid-column: 5/6;
+    grid-row: 2/3;
+    align-self:flex-end;
+
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: .5rem;
 }
 
 .modalDialog {
@@ -87,7 +159,7 @@ main {
     margin: 0rem;
     padding: 0rem;
 
-    box-shadow: 1px 0px 5px #777;
+    box-shadow: 3px 3px 5px #777;
 }
 
 .context-wrapper-hidden {
@@ -112,21 +184,22 @@ main {
 }
 
 .context-menu :hover {
-    background-color: #f0f0f0;
+    background-color: #dddddd;
 }
 
 /*Preivew CSS*/
 #text-wrapper {
-    background-color: hsl(34, 44%, 90%);
+    background-color: hsl(var(--tan-600));
     /* height: 50rem; */
-    width: 100%;
+    width: 90%;
     border-radius: 25px;
 
     justify-self: center;
-    grid-column: 2/3;
+    grid-column: 2/5;
 
     padding: 1rem;
-    margin: 1rem;
+    margin: auto;
+    margin-bottom: 1rem;
 }
 
 #text-title {
@@ -137,7 +210,7 @@ main {
 
 #text-content {
     padding: 1rem;
-    line-height: 30%;
+    line-height: 110%;
 }
 
 .plotLink {
@@ -147,7 +220,7 @@ main {
 
 .plotLink:hover {
     text-decoration: underline;
-    color: #0000aa;
+    color: #0000bb;
 
     cursor: pointer;
 }

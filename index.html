@@ -22,22 +22,25 @@
     <main>
 
         <script>let app = new PIXI.Application({
-                width: 1200,
-                height: 675,
-                backgroundColor: 0xdddddd
-            }); // 16:9 * 75
+                width: 1600,
+                height: 900,
+                backgroundColor: 0xc79f6b
+            }); // 16:9 * 100
 
             app.view.id = "stage";
             document.body.appendChild(app.view);
         </script>
 
         <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
-        <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()">
+        <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
 
         <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
-        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save()">
+        <p></p>
 
-        <!-- <a href="showStory.html">To story preview</a> -->
+        <a id="toPreview" href="showStory.html">To story preview</a>
+
+        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save()">
+        <input type="submit" class="btn" id="download" name="download" value="Download save" onclick="downloadSave()">
 
         <div class=" modalDialog">
             <!-- <p id="modalTitle"></p> -->
@@ -78,6 +81,10 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
                 Content
             </p>
         </div>
+
+
+        <input id = "dropzone" type="file" value="Drop save files here" onchange="droppedFile()">
+        <p id = "dropzone-overlay">Drop a previously saved file here to load</p>
 
     </main>
 
