@@ -8,6 +8,8 @@
     <title>Preview mode</title>
 
     <link rel="stylesheet" href="css/display-style.css">
+
+    <script src="https://pixijs.download/release/pixi.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="favicon-v1.png">
 </head>
 
@@ -21,8 +23,19 @@
         </p>
     </div>
 
+    <script>let app = new PIXI.Application({
+            width: 1200,
+            height: 675,
+            backgroundColor: 0xdddddd
+        }); // 16:9 * 75
+
+        app.view.id = "stage";
+        document.body.appendChild(app.view);
+    </script>
+
     <script src="Plot.js"></script>
     <script src="main.js"></script>
+    <!-- <script>loadFromSave();</script> -->
 </body>
 
 </html>

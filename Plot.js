@@ -5,6 +5,7 @@ class Plot {
             this.sprite = sprite,
             this.txtBox = txtBox,
             this.links = [],
-            this.dragging = false
+            this.dragging = false,
+            this.x = 0, this.y = 0
     }
 }

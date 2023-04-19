@@ -33,10 +33,12 @@ main {
     resize: none;
 
     grid-column: 2/4;
+    justify-self: center;
 }
 
 #modalText {
     width: 100%;
+    border-radius: 2px;
 }
 
 #modalTitle {
@@ -45,6 +47,12 @@ main {
     font-weight: bold;
 
     text-align: center;
+
+    width: 100%;
+    justify-self: center;
+
+    border: 1px solid black;
+    border-radius: 8px 8px 0px 0px;
 }
 
 #modalButton-save {
@@ -114,6 +122,9 @@ main {
     width: 100%;
     border-radius: 25px;
 
+    justify-self: center;
+    grid-column: 2/3;
+
     padding: 1rem;
     margin: 1rem;
 }
@@ -121,10 +132,12 @@ main {
 #text-title {
     text-align: center;
     padding: 1rem;
+    margin: 0rem;
 }
 
 #text-content {
     padding: 1rem;
+    line-height: 30%;
 }
 
 .plotLink {
