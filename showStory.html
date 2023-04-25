@@ -14,8 +14,12 @@
 </head>
 
 <body>
-    <a href="index.html">Back to Editing</a>
-    <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
+    <a href="editStory.html">To editing site</a>
+    <!-- <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()"> -->
+
+    <input id="dropzone" type="file" accept=".plot-holeJSON" value="Drop save files here" onchange="droppedFile()">
+    <p class='dropzone-error-hidden'> <br> <span></span></p>
+    <!-- <p id="dropzone-overlay">Drop a shared save file to load the story</p> -->
 
     <div id="text-wrapper">
         <h1 id="text-title"> Header</h1>

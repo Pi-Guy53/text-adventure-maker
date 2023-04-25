@@ -3,11 +3,15 @@ const log = console.log;
 log("Online");
 
 let modalDialog = document.getElementsByClassName("modalDialog")[0];
-modalDialog.className = "modalDialog-hidden";
+if (modalDialog != null) {
+    modalDialog.className = "modalDialog-hidden";
+}
 let tempPlotID;
 
 let plotList = [];
 let totalPlotLength = 0; //num of all plots ever made
+
+let allStories = [];
 
 let contextPlotId;
 
@@ -17,77 +21,102 @@ let mouseDown = false;
 let plotPreviewLength = 50;
 
 const LOCAL_STORAGE_PLOT_SAVE_LIST_KEY = 'storyPlots.list';
+const LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY = 'storyPlots.allStories';
+const LOCAL_STORAGE_PLOT_SAVE_LIST_INDEX_KEY = 'storyPlots.indexString';
 
-//Save And Close Modal
-document.querySelector('#modalButton-save').addEventListener('click', () => {
-    // console.log(modalDialog);
-    modalDialog.className = "modalDialog-hidden";
+if (modalDialog != null) {
+    //Save And Close Modal
+    document.querySelector('#modalButton-save').addEventListener('click', () => {
+        // console.log(modalDialog);
+        modalDialog.className = "modalDialog-hidden";
 
-    if (tempPlotID != '') {
-        let tPlot = findPlotByID(tempPlotID);
-        tPlot.sprite.tint = 0xffffff; //remove selected tint
+        if (tempPlotID != '') {
+            let tPlot = findPlotByID(tempPlotID);
+            tPlot.sprite.tint = 0xffffff; //remove selected tint
 
-        let modalD = document.querySelector('#modalText');
-        let modalTitle = document.querySelector('#modalTitle');
+            let modalD = document.querySelector('#modalText');
+            let modalTitle = document.querySelector('#modalTitle');
 
-        tPlot.text = modalD.value; //set the inner text to what the user typed
-        let txt = modalD.value;
+            tPlot.text = modalD.value; //set the inner text to what the user typed
+            let txt = modalD.value;
 
-        log('~~~~~check');
+            log('~~~~~check');
 
-        if (modalTitle.value != '' && isUnique(modalTitle.value)) {
+            if (modalTitle.value != '' && isUnique(modalTitle.value)) {
 
-            tPlot.id = modalTitle.value;
-            tPlot.sprite.id = modalTitle.value;
+                tPlot.id = modalTitle.value;
+                tPlot.sprite.id = modalTitle.value;
 
-            for (let i = 0; i < plotList.length; i++) {
-                for(let l = 0; l < plotList[i].links.length; l++)
-                {
-                    if(plotList[i].links[l].link == tempPlotID)
-                    {
-                        let tempLText ='';
+                for (let i = 0; i < plotList.length; i++) {
+                    for (let l = 0; l < plotList[i].links.length; l++) {
+                        if (plotList[i].links[l].link == tempPlotID) {
+                            let tempLText = '';
 
-                        let tx1 = plotList[i].text.slice(0, plotList[i].links[l].linkStart);
-                        let tx2 = plotList[i].text.slice(plotList[i].links[l].linkStart, plotList[i].links[l].linkEnd);
-                        let tx3 = plotList[i].text.slice(plotList[i].links[l].linkEnd, plotList[i].text.length);
+                            let tx1 = plotList[i].text.slice(0, plotList[i].links[l].linkStart);
+                            let tx2 = plotList[i].text.slice(plotList[i].links[l].linkStart, plotList[i].links[l].linkEnd);
+                            let tx3 = plotList[i].text.slice(plotList[i].links[l].linkEnd, plotList[i].text.length);
 
-                        tx2 = tx2.split('::')[0] + '::';
+                            tx2 = tx2.split('::')[0] + '::';
 
-                        // log(tx1);
-                        // log(tx2);
-                        // log(tx3); 
-                        // log('slices!!');
+                            // log(tx1);
+                            // log(tx2);
+                            // log(tx3); 
+                            // log('slices!!');
 
-                        tempLText = tx1 + tx2 + modalTitle.value + tx3;
-                        // log(tempLText);
-                        plotList[i].text = tempLText;
+                            tempLText = tx1 + tx2 + modalTitle.value + tx3;
+                            // log(tempLText);
+                            plotList[i].text = tempLText;
+                        }
                     }
                 }
             }
+            else if (modalTitle.value != tPlot.id) {
+                alert("A Plot's title must be unique and cannot be empty");
+            }
+
+            log('~~~~~End check');
+
+
+            //if (txt.length > 0) {
+            tPlot.txtBox.text = tPlot.id;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
+            //}
+            //else {
+            //    tPlot.txtBox.text = "~empty~";
+            //}
+
+            console.log(tPlot.text);
+
+            modalD.value = '';
+            modalTitle.value = '';
+            tempPlotID = '';
         }
-        else if(modalTitle.value != tPlot.id){
-            alert("A Plot's title must be unique and cannot be empty");
+
+        setPreview();
+    });
+
+    //Close Without Saving Modal
+    document.querySelector('#modalButton-cancel').addEventListener('click', () => {
+        // console.log(modalDialog);
+        modalDialog.className = "modalDialog-hidden";
+
+        if (tempPlotID != '') {
+            let tPlot = findPlotByID(tempPlotID);
+            tPlot.sprite.tint = 0xffffff;//remove selected tint
+
+            let modalD = document.querySelector('#modalText');
+            let modalTitle = document.querySelector('#modalTitle');
+
+            console.log(tPlot.text);
+
+            modalD.value = '';
+            modalTitle.value = '';
+            tempPlotID = '';
         }
 
-        log('~~~~~End check');
-    
+        setPreview();
+    });
 
-        //if (txt.length > 0) {
-        tPlot.txtBox.text = tPlot.id;//"       " + txt.slice(0, plotPreviewLength).trim() + "..."; //add preview text to the plot
-        //}
-        //else {
-        //    tPlot.txtBox.text = "~empty~";
-        //}
-
-        console.log(tPlot.text);
-
-        modalD.value = '';
-        modalTitle.value = '';
-        tempPlotID = '';
-    }
-
-    setPreview();
-});
+}
 
 function isUnique(str) {
 
@@ -98,31 +127,9 @@ function isUnique(str) {
     return false;
 }
 
-//Close Without Saving Modal
-document.querySelector('#modalButton-cancel').addEventListener('click', () => {
-    // console.log(modalDialog);
-    modalDialog.className = "modalDialog-hidden";
-
-    if (tempPlotID != '') {
-        let tPlot = findPlotByID(tempPlotID);
-        tPlot.sprite.tint = 0xffffff;//remove selected tint
-
-        let modalD = document.querySelector('#modalText');
-        let modalTitle = document.querySelector('#modalTitle');
-
-        console.log(tPlot.text);
-
-        modalD.value = '';
-        modalTitle.value = '';
-        tempPlotID = '';
-    }
-
-    setPreview();
-});
-
-addPlot(); //TESTING
-addPlot();
-addPlot();
+// addPlot(); //TESTING
+// addPlot();
+// addPlot();
 
 //creats a new plot
 function addPlot(inputText, inputId) {
@@ -254,22 +261,24 @@ function addPlot(inputText, inputId) {
 
 //Prevent right clicks on the page for a custom context meun
 //would prefer to just add to the existing one, but not sure how to do that RN
-app.view.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-});
-
-app.view.addEventListener("mousedown", (e) => {
-    if (e.button == 2) {
+if (app != null) {
+    app.view.addEventListener("contextmenu", (e) => {
         e.preventDefault();
-        //hideContextMenu();
-        showContextMenu(e.clientX, e.clientY, e.target.id);
-    }
-});
+    });
 
-app.view.addEventListener("click", (e) => {
-    e.preventDefault();
-    hideContextMenu();
-});
+    app.view.addEventListener("mousedown", (e) => {
+        if (e.button == 2) {
+            e.preventDefault();
+            //hideContextMenu();
+            showContextMenu(e.clientX, e.clientY, e.target.id);
+        }
+    });
+
+    app.view.addEventListener("click", (e) => {
+        e.preventDefault();
+        hideContextMenu();
+    });
+}
 
 //deletes the specified plot
 function deletePlot(id) {
@@ -473,13 +482,13 @@ function runCommand(str, tPlot, cS, cE) {
     str[0] = str[0].trim();
     str[1] = str[1].trim();
 
-    log(str); 
+    log(str);
 
     if (findPlotByID(str[1]) != false) {
-        tPlot.links.push({ display: str[0], link: str[1], linkStart: cS, linkEnd: cE});
+        tPlot.links.push({ display: str[0], link: str[1], linkStart: cS, linkEnd: cE });
     }
-    else{
-        tPlot.links.push({ display: str[0], link: -99, linkStart: cS, linkEnd: cE});
+    else {
+        tPlot.links.push({ display: str[0], link: -99, linkStart: cS, linkEnd: cE });
     }
 
     log(str);
@@ -496,12 +505,11 @@ function setPreview() {
         //log(plotList[i].links, "links", i);
     }
 
-    for(let i = 0; i < plotList.length; i++)
-    {
+    for (let i = 0; i < plotList.length; i++) {
         plotList[i].sprite.tint = 0xffffff;
     }
 
-    plotList[0].sprite.tint= 0xffff00;
+    plotList[0].sprite.tint = 0xffff00;
 
     showNewPlot(plotList[0].id); //!NEED TO MAKE DYNAMIC
     drawAllLines();
@@ -511,8 +519,7 @@ let lineArr = [];
 
 function drawConnectingLine(a, b) {
 
-    if(a != null && b != null)
-    {
+    if (a != null && b != null) {
         let line = new PIXI.Graphics();
         line.lineStyle(3, 0x003300);
 
@@ -610,11 +617,10 @@ function showNewPlot(newPlotId) {
         if (cmd == true && txt[i] == '>' && txt[i + 1] == '>') {
             cmd = false;
 
-            if(tPlot.links[cIndex].link != -99)
-            {
+            if (tPlot.links[cIndex].link != -99) {
                 linkedList += `<span class ="plotLink" onclick = 'showNewPlot("${tPlot.links[cIndex]?.link}")'> ${tPlot.links[cIndex]?.display} </span>`;
             }
-            else{
+            else {
                 linkedList += `<span> ${tPlot.links[cIndex]?.display} </span>`;
             }
 
@@ -687,8 +693,7 @@ function save() {
     loadFromSave();
 }
 
-function downloadSave()
-{
+function downloadSave() {
     save();
 
     download('save', localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY));
@@ -696,8 +701,8 @@ function downloadSave()
 
 function download(filename, text) {
     var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
+    element.setAttribute('href', 'data:json/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename + '.plot-holeJSON');
 
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -707,21 +712,80 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
-function droppedFile()
-{
+function droppedFile() {
     const [file] = document.querySelector("input[type=file]").files;
     const reader = new FileReader();
 
-    reader.addEventListener("load", () => 
-    {
-        //console.log(reader.result);
-        loadFromUserSaveInput(reader.result);
+    reader.addEventListener("load", () => {
+        //console.log(file);
+        if (file.name.split('.')[1] == "plot-holeJSON") {
+            loadFromUserSaveInput(reader.result);
+        }
+        else {
+            console.error('Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plot-holeJSON file');
+
+            let msg = 'Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plot-holeJSON file';
+
+            displayuploadError(msg);
+        }
 
     });
 
-    if(file)
-    {
+    if (file) {
         reader.readAsText(file);
     }
 
+}
+
+function displayuploadError(msg) {
+
+    let dz = document.querySelector('.dropzone-error-hidden');
+    if (dz != null) {
+        dz.className = 'dropzone-error';
+        dz.innerHTML = '<br> <span>' + msg + '</span>';
+    }
+
+    setTimeout(() => {
+        let dez = document.querySelector('.dropzone-error');
+        if (dez != null) {
+            dez.className = 'dropzone-error-hidden';
+        }
+    }, 6000);
+}
+
+//Story selector
+function displayAllStories() {
+
+
+
+    allStories.forEach(element => {
+        log(element);
+    });
+}
+
+function createStory() {
+    let nameModal = document.querySelector('.save-name-modal-hidden');
+    if (nameModal != null) {
+        nameModal.className = "save-name-modal";
+    }
+}
+
+function namedStory(sName) {
+    log(sName);
+
+
+
+    let nameModal = document.querySelector('.save-name-modal');
+    if (nameModal != null) {
+        nameModal.className = "save-name-modal-hidden";
+    }
+
+    let grid = document.querySelector('#story-grid');
+    grid.innerHTML += `<div id = ${sName} class = 'storyBlock' onclick="storySelected(id);">${sName}</div>`;
+
+}
+
+
+function storySelected(id) {
+    log(id);
 }

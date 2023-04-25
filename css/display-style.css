@@ -9,8 +9,7 @@
     --background-100: 195 75% 86%;
 }
 
-body
-{
+body {
     background-color: hsl(var(--tan-500));
     font-size: 16pt;
 }
@@ -66,11 +65,28 @@ body
     display: none;
 }
 
-canvas{
+canvas {
     display: none;
 }
 
 footer {
     text-align: center;
     font-size: 10pt;
+}
+
+.dropzone-error {
+    text-overflow: ellipsis;
+
+    color: red;
+    font-weight: bold;
+}
+
+.dropzone-error span {
+    background-color: white;
+    border-radius: 2px;
+}
+
+.dropzone-error-hidden,
+.dropzone-error-hidden span {
+    display: none;
 }

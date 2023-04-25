@@ -31,31 +31,31 @@ main {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
-.btn
-{
+.btn {
     margin: 1rem;
     background-color: hsl(var(--tan-200));
     color: white;
-    
+
     font-size: 14pt;
 
     border: 3px ridge black;
 
-    border-radius: 3px;;
+    border-radius: 3px;
+    ;
 }
 
-.btn:hover{
+.btn:hover {
     margin: 1rem;
     background-color: hsl(var(--tan-300));
     color: white;
 
     border: 3px groove black;
 
-    border-radius: 3px;;
+    border-radius: 3px;
+    ;
 }
 
-#toPreview
-{
+#toPreview {
     border: 1px solid black;
     border-radius: 3px;
 
@@ -65,24 +65,44 @@ main {
     background-color: hsl(var(--tan-600));
 }
 
-#dropzone
-{
+.dropzone-error {
+    grid-column: 5/6;
+    grid-row: 2/3;
+
+    padding: .5rem 0rem 0rem 1.5rem;
+
+    text-overflow: ellipsis;
+
+    color: red;
+    font-weight: bold;
+}
+
+.dropzone-error span {
+    background-color: white;
+    border-radius: 2px;
+}
+
+.dropzone-error-hidden,
+.dropzone-error-hidden span {
+    display: none;
+}
+
+#dropzone {
     grid-column: 5/6;
     grid-row: 2/3;
     margin: 1rem;
 
     padding: .5rem;
-    text-overflow:ellipsis;
+    text-overflow: ellipsis;
 
     border: 1px solid black;
     border-radius: 5px;
 }
 
-#dropzone-overlay
-{
+#dropzone-overlay {
     grid-column: 5/6;
     grid-row: 2/3;
-    align-self:flex-end;
+    align-self: flex-end;
 
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -91,7 +111,7 @@ main {
 
 .modalDialog {
     position: absolute;
-    transform: translateY(250px);
+    transform: translateY(350px);
 
     text-align: center;
 
@@ -138,6 +158,23 @@ main {
 }
 
 .modalDialog-hidden {
+    display: none;
+}
+
+.save-name-modal {
+    display: grid;
+    width: 70%;
+    margin: auto;
+}
+
+.save-name-modal input {
+    font-size: 16pt;
+    text-align: center;
+    width: 250;
+    height: 75px;
+}
+
+.save-name-modal-hidden {
     display: none;
 }
 
