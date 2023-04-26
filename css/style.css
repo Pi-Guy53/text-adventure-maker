@@ -21,150 +21,44 @@ body {
     background-color: hsl(var(--tan-500));
 }
 
-footer {
-    text-align: center;
-    font-size: 10pt;
-}
-
 main {
+    background-color: hsl(var(--tan-500));
+    width: 100%;
+
+}
+
+#story-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(6, 1fr);
 }
 
-.btn {
-    margin: 1rem;
-    background-color: hsl(var(--tan-200));
-    color: white;
-
-    font-size: 14pt;
-
-    border: 3px ridge black;
-
-    border-radius: 3px;
-    ;
-}
-
-.btn:hover {
-    margin: 1rem;
-    background-color: hsl(var(--tan-300));
-    color: white;
-
-    border: 3px groove black;
-
-    border-radius: 3px;
-    ;
-}
-
-#toPreview {
-    border: 1px solid black;
-    border-radius: 3px;
-
+.storyBlock {
+    height: 100px;
+    font-size: 16pt;
     text-align: center;
-    align-self: center;
-
-    background-color: hsl(var(--tan-600));
-}
-
-.dropzone-error {
-    grid-column: 5/6;
-    grid-row: 2/3;
-
-    padding: .5rem 0rem 0rem 1.5rem;
-
-    text-overflow: ellipsis;
-
-    color: red;
-    font-weight: bold;
-}
-
-.dropzone-error span {
-    background-color: white;
-    border-radius: 2px;
-}
-
-.dropzone-error-hidden,
-.dropzone-error-hidden span {
-    display: none;
-}
-
-#dropzone {
-    grid-column: 5/6;
-    grid-row: 2/3;
-    margin: 1rem;
-
-    padding: .5rem;
-    text-overflow: ellipsis;
 
     border: 1px solid black;
     border-radius: 5px;
+    background-color: hsl(var(--tan-600));
+    margin: 1rem;
 }
 
-#dropzone-overlay {
-    grid-column: 5/6;
-    grid-row: 2/3;
-    align-self: flex-end;
-
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-bottom: .5rem;
+.storyBlock:hover {
+    cursor: pointer;
+    background-color: hsl(var(--tan-400));
 }
 
-.modalDialog {
-    position: absolute;
-    transform: translateY(350px);
-
-    text-align: center;
-
-    display: grid;
-    grid-template-columns: 1fr 2fr 2fr 1fr;
-    width: 100%;
-}
-
-.modalDialog textarea {
-    width: 100%;
-    resize: none;
-
-    grid-column: 2/4;
-    justify-self: center;
-}
-
-#modalText {
-    width: 100%;
-    border-radius: 2px;
-}
-
-#modalTitle {
-    grid-column: 2/4;
-    font-size: 16pt;
-    font-weight: bold;
-
-    text-align: center;
-
-    width: 100%;
-    justify-self: center;
-
-    border: 1px solid black;
-    border-radius: 8px 8px 0px 0px;
-}
-
-#modalButton-save {
-    grid-column: 2/3;
-    justify-self: right;
-}
-
-#modalButton-cancel {
-    grid-column: 3/4;
-    justify-self: left;
-}
-
-.modalDialog-hidden {
-    display: none;
+.newStory {
+    width: 150px;
 }
 
 .save-name-modal {
     display: grid;
     width: 70%;
-    margin: auto;
+    margin: 1rem auto;
+
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px grey;
 }
 
 .save-name-modal input {
@@ -178,86 +72,12 @@ main {
     display: none;
 }
 
-/*PIXI stage*/
-#stage {
-    margin: auto;
-    width: 100%;
-    border-radius: 2px;
-}
-
-/* context menu */
-
-.context-wrapper {
-    width: 100px;
-    background: #ffffff;
-    border: 1px solid black;
-    border-radius: 5px;
-
-    margin: 0rem;
-    padding: 0rem;
-
-    box-shadow: 3px 3px 5px #777;
-}
-
-.context-wrapper-hidden {
+/* default */
+canvas {
     display: none;
 }
 
-.context-content {
-    margin: 0rem;
-    padding: 0rem;
-}
-
-.context-menu {
-    margin: 0rem;
-    padding: 0rem;
-}
-
-.context-menu-item {
-    list-style: none;
-    background-color: #ffffff;
-    margin: .25rem;
-    padding: .125rem;
-}
-
-.context-menu :hover {
-    background-color: #dddddd;
-}
-
-/*Preivew CSS*/
-#text-wrapper {
-    background-color: hsl(var(--tan-600));
-    /* height: 50rem; */
-    width: 90%;
-    border-radius: 25px;
-
-    justify-self: center;
-    grid-column: 2/5;
-
-    padding: 1rem;
-    margin: auto;
-    margin-bottom: 1rem;
-}
-
-#text-title {
+footer {
     text-align: center;
-    padding: 1rem;
-    margin: 0rem;
-}
-
-#text-content {
-    padding: 1rem;
-    line-height: 110%;
-}
-
-.plotLink {
-    text-decoration: underline;
-    color: #000055;
-}
-
-.plotLink:hover {
-    text-decoration: underline;
-    color: #0000bb;
-
-    cursor: pointer;
+    font-size: 10pt;
 }

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story Plots</title>
-    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="https://pixijs.download/release/pixi.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="favicon-v1.png">
@@ -14,17 +14,24 @@
 </head>
 
 <body>
+
+    <header>
+        <h1>Story Plots</h1>
+        <h3>The web-app</h3>
+    </header>
+
     <main>
-        <a href="editStory.html">To editing site</a>
+        <a href="html/editStory.html">To editing site</a>
         <br>
-        <a href="showStory.html">To show case</a>
+        <a href="html/showStory.html">To show case</a>
         <br>
         <input type="submit" class="newStory" id="placeholder" name="newStory" value='[+] New Story'
-            onclick="createStory()">
+            onclick="nameStory()">
 
         <div class="save-name-modal-hidden">
             <input type="text" placeholder="Name your Story..." value="untitled"
-                onkeydown="if (event.keyCode == 13) {namedStory(value)}">
+                onkeydown="if (event.keyCode == 13) {createStory(value)}">
+            <input type="submit" name="cancelNameing" id="cancelNameing" value="Cancel" onclick="cancelStoryNaming()">
         </div>
 
         <section id="story-grid">
@@ -45,7 +52,8 @@
     &copy; 2023 UsrnGamesInc, All Rights Reserved
 </footer>
 
-<script src="Plot.js"></script>
-<script src="main.js"></script>
+<script src="js/Plot.js"></script>
+<script src="js/main.js"></script>
+<script src="js/indexInit.js"></script>
 
 </html>

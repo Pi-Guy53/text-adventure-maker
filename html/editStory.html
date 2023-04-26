@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit story</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/edit-style.css">
 
     <script src="https://pixijs.download/release/pixi.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="favicon-v1.png">
@@ -15,8 +15,9 @@
 
 <body>
     <header>
-        <h1>Story Plots</h1>
-        <h3>The web-app</h3>
+        <!-- <h1>Story Plots</h1>
+        <h3>The web-app</h3> -->
+        <h2 class="story-name">Display name</h2>
     </header>
 
     <main>
@@ -33,9 +34,9 @@
         <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
 
         <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
+        <a id="back2Main" class="btn" href="../index.html">Back to Story Select</a>
 
         <a id="toPreview" href="showStory.html">To story preview</a>
-        <p></p>
 
         <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save()">
         <input type="submit" class="btn" id="download" name="download" value="Download save" onclick="downloadSave()">
@@ -80,7 +81,7 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
             </p>
         </div>
 
-        <input id="dropzone" type="file" accept=".plot-holeJSON" value="Drop save files here" onchange="droppedFile()">
+        <input id="dropzone" type="file" accept=".plothole" value="Drop save files here" onchange="droppedFile()">
         <p class='dropzone-error-hidden'> <br> <span></span></p>
         <p id="dropzone-overlay">Drop a previously saved file here to load</p>
 
@@ -90,8 +91,8 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
         &copy; 2023 UsrnGamesInc, All Rights Reserved
     </footer>
 
-    <script src="Plot.js"></script>
-    <script src="main.js"></script>
+    <script src="../js/Plot.js"></script>
+    <script src="../js/main.js"></script>
 
 </body>
 

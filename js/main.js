@@ -133,7 +133,7 @@ function isUnique(str) {
 
 //creats a new plot
 function addPlot(inputText, inputId) {
-    let plotS = PIXI.Sprite.from('img/plot-white.png');
+    let plotS = PIXI.Sprite.from('../img/plot-white.png');
     let tId
 
     if (inputId != null) {
@@ -635,6 +635,7 @@ function showNewPlot(newPlotId) {
 
 let loadPlotList = [];
 
+//!modify to pull from an allStories Index
 function loadFromSave() {
     deleteAllPlots();
 
@@ -647,6 +648,9 @@ function loadFromSave() {
     pullPlotsFromLoad();
     setPreview();
 }
+
+//!modify to pull from an allStories Index
+//? May remove this one
 
 function loadFromUserSaveInput(userInput) {
     deleteAllPlots();
@@ -675,6 +679,7 @@ function pullPlotsFromLoad() {
     }
 }
 
+//!Modify to save to the proper allStories index
 function save() {
     log(plotList);
 
@@ -689,6 +694,7 @@ function save() {
 
     //log(JSON.stringify(arr));
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(arr));
+    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
 
     loadFromSave();
 }
@@ -702,7 +708,7 @@ function downloadSave() {
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:json/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename + '.plot-holeJSON');
+    element.setAttribute('download', filename + '.plothole');
 
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -718,13 +724,13 @@ function droppedFile() {
 
     reader.addEventListener("load", () => {
         //console.log(file);
-        if (file.name.split('.')[1] == "plot-holeJSON") {
+        if (file.name.split('.')[1] == "plothole") {
             loadFromUserSaveInput(reader.result);
         }
         else {
-            console.error('Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plot-holeJSON file');
+            console.error('Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plothole file');
 
-            let msg = 'Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plot-holeJSON file';
+            let msg = 'Wrong file type: .' + file.name.split('.')[1] + ' is not a valid extension, please use a .plothole file';
 
             displayuploadError(msg);
         }
@@ -754,26 +760,40 @@ function displayuploadError(msg) {
 }
 
 //Story selector
-function displayAllStories() {
 
+function initAllStories() {
 
+    allStories = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY)) || [];
 
-    allStories.forEach(element => {
-        log(element);
-    });
-}
+    let grid = document.querySelector('#story-grid');
+    grid.innerHTML = '';
 
-function createStory() {
-    let nameModal = document.querySelector('.save-name-modal-hidden');
-    if (nameModal != null) {
-        nameModal.className = "save-name-modal";
+    if (grid != null) {
+        allStories.forEach(element => {
+            log(element.innerPlots);
+
+            grid.innerHTML += `<a id = ${element.name} class = 'storyBlock' href="html/editStory.html" onclick="storySelected(id);">${element.name}</a>`;
+        });
     }
 }
 
-function namedStory(sName) {
+function nameStory() {
+    let nameModal = document.querySelector('.save-name-modal-hidden');
+    if (nameModal != null) {
+        nameModal.className = "save-name-modal";
+        nameModal.querySelector('input').value = 'untitled';
+    }
+}
+
+function cancelStoryNaming() {
+    let nameModal = document.querySelector('.save-name-modal');
+    if (nameModal != null) {
+        nameModal.className = "save-name-modal-hidden";
+    }
+}
+
+function createStory(sName, fillPlots) {
     log(sName);
-
-
 
     let nameModal = document.querySelector('.save-name-modal');
     if (nameModal != null) {
@@ -781,11 +801,42 @@ function namedStory(sName) {
     }
 
     let grid = document.querySelector('#story-grid');
-    grid.innerHTML += `<div id = ${sName} class = 'storyBlock' onclick="storySelected(id);">${sName}</div>`;
+    grid.innerHTML += `<a id = ${sName} class = 'storyBlock' href="html/editStory.html" onclick="storySelected(id);">${sName}</a>`;
 
+    if (fillPlots == [] || fillPlots == null) {
+        allStories.push({ name: sName, innerPlots: [] });
+    }
+    else {
+        allStories.push({ name: sName, innerPlots: fillPlots });
+    }
+
+    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
 }
 
+function deleteStory(id) {
+    allStories = allStories.filter(item => item.name !== id);
+    localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
+
+    log(allStories);
+
+    initAllStories();
+}
 
 function storySelected(id) {
     log(id);
+    let sIndex = storyIndexFromName(id);
+
+    if (sIndex != -999) {
+        localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_INDEX_KEY, sIndex);
+    }
+}
+
+function storyIndexFromName(name) {
+    for (let i = 0; i < allStories.length; i++) {
+        if (allStories[i].name == name) {
+            return i;
+        }
+    }
+
+    return -999;
 }

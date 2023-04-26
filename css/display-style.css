@@ -90,3 +90,11 @@ footer {
 .dropzone-error-hidden span {
     display: none;
 }
+
+#dropzone:hover {
+    cursor: copy;
+}
+
+#dropzone {
+    padding: .5rem;
+}

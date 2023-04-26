@@ -1,0 +1,270 @@
+:root {
+    --tan-100: 34, 44%, 20%;
+    --tan-200: 34, 44%, 30%;
+    --tan-300: 34, 44%, 45%;
+    --tan-400: 34, 44%, 60%;
+    --tan-500: 34, 44%, 80%;
+    --tan-600: 34, 44%, 90%;
+
+    --background-100: 195 75% 86%;
+}
+
+header {
+    text-align: center;
+    color: black;
+}
+
+body {
+    font-size: 14pt;
+    padding: 1rem;
+
+    background-color: hsl(var(--tan-500));
+}
+
+footer {
+    text-align: center;
+    font-size: 10pt;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.btn {
+    margin: 1rem;
+    background-color: hsl(var(--tan-200));
+    color: white;
+
+    font-size: 14pt;
+
+    border: 3px ridge black;
+
+    border-radius: 3px;
+
+    padding: 5px;
+    text-align: center;
+}
+
+.btn:hover {
+    margin: 1rem;
+    background-color: hsl(var(--tan-300));
+    color: white;
+
+    border: 3px groove black;
+
+    border-radius: 3px;
+    ;
+}
+
+#toPreview {
+    border: 1px solid black;
+    border-radius: 3px;
+
+    text-align: center;
+    align-self: center;
+
+    background-color: hsl(var(--tan-600));
+}
+
+.dropzone-error {
+    grid-column: 5/6;
+    grid-row: 2/3;
+
+    padding: .5rem 0rem 0rem 1.5rem;
+
+    text-overflow: ellipsis;
+
+    color: red;
+    font-weight: bold;
+}
+
+.dropzone-error span {
+    background-color: white;
+    border-radius: 2px;
+}
+
+.dropzone-error-hidden,
+.dropzone-error-hidden span {
+    display: none;
+}
+
+#dropzone {
+    grid-column: 5/6;
+    grid-row: 2/3;
+    margin: 1rem;
+
+    padding: .5rem;
+    text-overflow: ellipsis;
+
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+
+#dropzone:hover {
+    cursor: copy;
+}
+
+#dropzone-overlay {
+    grid-column: 5/6;
+    grid-row: 2/3;
+    align-self: flex-end;
+
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: .5rem;
+}
+
+.modalDialog {
+    position: absolute;
+    transform: translateY(350px);
+
+    text-align: center;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr 1fr;
+    width: 100%;
+}
+
+.modalDialog textarea {
+    width: 100%;
+    resize: none;
+
+    grid-column: 2/4;
+    justify-self: center;
+}
+
+#modalText {
+    width: 100%;
+    border-radius: 2px;
+}
+
+#modalTitle {
+    grid-column: 2/4;
+    font-size: 16pt;
+    font-weight: bold;
+
+    text-align: center;
+
+    width: 100%;
+    justify-self: center;
+
+    border: 1px solid black;
+    border-radius: 8px 8px 0px 0px;
+}
+
+#modalButton-save {
+    grid-column: 2/3;
+    justify-self: right;
+}
+
+#modalButton-cancel {
+    grid-column: 3/4;
+    justify-self: left;
+}
+
+.modalDialog-hidden {
+    display: none;
+}
+
+.save-name-modal {
+    display: grid;
+    width: 70%;
+    margin: auto;
+}
+
+.save-name-modal input {
+    font-size: 16pt;
+    text-align: center;
+    width: 250;
+    height: 75px;
+}
+
+.save-name-modal-hidden {
+    display: none;
+}
+
+/*PIXI stage*/
+#stage {
+    margin: auto;
+    width: 100%;
+    border-radius: 2px;
+}
+
+/* context menu */
+
+.context-wrapper {
+    width: 100px;
+    background: #ffffff;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    margin: 0rem;
+    padding: 0rem;
+
+    box-shadow: 3px 3px 5px #777;
+}
+
+.context-wrapper-hidden {
+    display: none;
+}
+
+.context-content {
+    margin: 0rem;
+    padding: 0rem;
+}
+
+.context-menu {
+    margin: 0rem;
+    padding: 0rem;
+}
+
+.context-menu-item {
+    list-style: none;
+    background-color: #ffffff;
+    margin: .25rem;
+    padding: .125rem;
+}
+
+.context-menu :hover {
+    background-color: #dddddd;
+}
+
+/*Preivew CSS*/
+#text-wrapper {
+    background-color: hsl(var(--tan-600));
+    /* height: 50rem; */
+    width: 90%;
+    border-radius: 25px;
+
+    justify-self: center;
+    grid-column: 2/5;
+
+    padding: 1rem;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+#text-title {
+    text-align: center;
+    padding: 1rem;
+    margin: 0rem;
+}
+
+#text-content {
+    padding: 1rem;
+    line-height: 110%;
+}
+
+.plotLink {
+    text-decoration: underline;
+    color: #000055;
+}
+
+.plotLink:hover {
+    text-decoration: underline;
+    color: #0000bb;
+
+    cursor: pointer;
+}
