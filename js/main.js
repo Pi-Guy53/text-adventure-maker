@@ -21,6 +21,8 @@ let mouseDown = false;
 
 let plotPreviewLength = 50;
 
+let currentDraggingPlot = null;
+
 const LOCAL_STORAGE_PLOT_SAVE_LIST_KEY = 'storyPlots.list';
 const LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY = 'storyPlots.allStories';
 const LOCAL_STORAGE_PLOT_SAVE_LIST_INDEX_KEY = 'storyPlots.indexString';
@@ -186,29 +188,28 @@ function addPlot(inputText, inputId) {
     app.stage.addChild(plotS);
 
     plotS.addEventListener("mouseup", (e) => {
-        if (plotS.dragging) {
-            plotS.dragging = false;
-            mouseDown = false;
-        }
-        else {
-            mouseDown = false;
-            modalDialog.className = "modalDialog";
-            tempPlotID = e.target.id;
+            if(!plotS.dragging)
+            {
+                modalDialog.className = "modalDialog";
+                tempPlotID = e.target.id;
 
-            let modalD = document.querySelector('#modalText');
-            let modalTitle = document.querySelector('#modalTitle');
+                let modalD = document.querySelector('#modalText');
+                let modalTitle = document.querySelector('#modalTitle');
 
-            let tPlot = findPlotByID(tempPlotID);
+                let tPlot = findPlotByID(tempPlotID);
 
-            for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
-                plotList[i].sprite.tint = 0xffffff;
+                for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
+                    plotList[i].sprite.tint = 0xffffff;
+                }
+
+                tPlot.sprite.tint = 0xaaaaaa;
+
+                modalD.value = tPlot.text;
+                modalTitle.value = tPlot.id;
             }
 
-            tPlot.sprite.tint = 0xaaaaaa;
-
-            modalD.value = tPlot.text;
-            modalTitle.value = tPlot.id;
-        }
+            plotS.dragging = false;
+            mouseDown = false;
     });
 
     plotS.addEventListener("rightup", (e) => {
@@ -222,11 +223,15 @@ function addPlot(inputText, inputId) {
 
     plotS.addEventListener("mousedown", function (e) {
         mouseDown = true;
+        app.stage.removeChild(plotS);
+        app.stage.addChild(plotS);
+
+        currentDraggingPlot = plotS;
         // setTimeout(() => {
         //     if (mouseDown) {
         //         plotS.dragging = true;
-        //         app.stage.removeChild(plotS);
-        //         app.stage.addChild(plotS);
+                // app.stage.removeChild(plotS);
+                // app.stage.addChild(plotS);
         //     }
         // }, 75);
 
@@ -241,24 +246,6 @@ function addPlot(inputText, inputId) {
     //     }
     // });
 
-    plotS.addEventListener("mousemove", function (e) {
-        //console.log(e);
-
-        if (mouseDown) { //plotS.dragging
-            //console.log(e);
-            plotS.x = Math.min(Math.max(e.data.global.x + offsetX, 0), app.view.width);
-            plotS.y = Math.min(Math.max(e.data.global.y + offsetY, 0), app.view.height);
-
-            p.x = plotS.x;
-            p.y = plotS.y;
-
-            plotS.dragging = true;
-
-            drawAllLines();
-
-            //console.log(e.data.global.y + offsetY, plotS.x, plotS.y);
-        }
-    });
 }
 
 //Prevent right clicks on the page for a custom context meun
@@ -313,16 +300,6 @@ function findPlotByID(id) {
     return false;
 }
 
-//render the plots into a grid //Will be removed once I had custom plot positions
-function renderPlots() {
-    /*
-    for (let i = 0; i < plotList.length; i++) {
-        plotList[i].sprite.x = 60 + (i * 110);
-        plotList[i].sprite.y = 75;
-    }
-    */
-}
-
 //ContextMenu functions
 function showContextMenu(posX, posY, plotId) {
     contextPlotId = plotId;
@@ -363,6 +340,23 @@ app.stage.addEventListener('mousemove', (e) => {
     // log(e.global.x, e.global.y);
     x = e.global.x;
     y = e.global.y;
+
+    if(currentDraggingPlot != null){
+        if (mouseDown) { //plotS.dragging
+            //console.log(e);
+            currentDraggingPlot.x = Math.min(Math.max(e.data.global.x + offsetX, 0), app.view.width);
+            currentDraggingPlot.y = Math.min(Math.max(e.data.global.y + offsetY, 0), app.view.height);
+
+            currentDraggingPlot.dragging = true;
+
+            drawAllLines();
+
+            //console.log(e.data.global.y + offsetY, plotS.x, plotS.y);
+        }
+        else{
+            currentDraggingPlot.dragging = false;
+        }
+    }
 });
 
 function contextNew(e) {
@@ -377,6 +371,9 @@ function contextNew(e) {
 
     tPlot.sprite.x = x;
     tPlot.sprite.y = y;
+
+    tPlot.x = x;
+    tPlot.y = y;
 
     hideContextMenu();
 }
@@ -521,6 +518,8 @@ function setPreview() {
 }
 
 let lineArr = [];
+let lineCont = new PIXI.Container();
+app.stage.addChild(lineCont);
 
 function drawConnectingLine(a, b) {
 
@@ -553,7 +552,7 @@ function drawConnectingLine(a, b) {
 
         lineArr.push(line);
 
-        app.stage.addChild(line);
+        lineCont.addChild(line);
     }
 }
 
@@ -577,11 +576,13 @@ function drawAllLines() {
         }
     }
 
+    app.stage.removeChild(lineCont);
+    app.stage.addChildAt(lineCont, 0);
     // move all plots to front of page
-    for (let i = 0; i < plotList.length; i++) {
-        app.stage.removeChild(plotList[i].sprite);
-        app.stage.addChild(plotList[i].sprite);;
-    }
+    // for (let i = 0; i < plotList.length; i++) {
+    //     app.stage.removeChild(plotList[i].sprite);
+    //     app.stage.addChild(plotList[i].sprite);
+    // }
 }
 
 
@@ -706,6 +707,9 @@ function save() {
     let arr = plotList;
 
     for (let i = 0; i < arr.length; i++) {
+        arr[i].x = arr[i].sprite.x;
+        arr[i].y = arr[i].sprite.y;
+
         arr[i].sprite = null;
         arr[i].txtBox = null;
     }
