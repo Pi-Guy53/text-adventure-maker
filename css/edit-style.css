@@ -35,6 +35,47 @@ img {
     border: 1px solid black;
 }
 
+.savePopUp
+{
+    position:absolute;
+    color: white;
+    font-size: 22pt;
+    background-color: hsl(var(--tan-200));
+
+    padding: 1rem;
+    margin: auto;
+    text-align: center;
+
+    display: grid;
+    align-self: center;
+    justify-self: center;
+
+    border: 1px solid black;
+    border-radius: 5px;
+
+    box-shadow: 1px 5px 5px black;
+
+    width: 25%;
+
+    animation-name: fadeOut;
+    animation-duration: 1s;
+}
+
+.savePopUp-hidden
+{
+    display: none;
+}
+
+@keyframes fadeOut {
+    0% {
+        filter: opacity(1);
+    }
+
+    100% {
+        filter: opacity(0);
+    }
+}
+
 .btn {
     margin: 1rem;
     background-color: hsl(var(--tan-200));

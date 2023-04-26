@@ -724,7 +724,23 @@ function save() {
 
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
 
+    btnSaveAnim();
+
     loadFromSave();
+}
+
+function btnSaveAnim()
+{
+    let svPop = document.querySelector('.savePopUp-hidden');
+    svPop.className = 'savePopUp';
+
+    document.querySelector('#save').disabled = true;
+
+    setTimeout(() => {
+        let svPop = document.querySelector('.savePopUp');
+        svPop.className = 'savePopUp-hidden';
+        document.querySelector('#save').disabled = false;
+    }, 1000);
 }
 
 function downloadSave() {
