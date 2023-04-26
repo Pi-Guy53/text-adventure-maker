@@ -12,6 +12,7 @@ let plotList = [];
 let totalPlotLength = 0; //num of all plots ever made
 
 let allStories = [];
+let storyIndex;
 
 let contextPlotId;
 
@@ -443,7 +444,7 @@ function lerp(p, a1, a2, b1, b2) {
     return (scale2 * delta) + b1;
 }
 
-log(plotList);
+// log(plotList);
 
 /*
 cmd keys
@@ -679,6 +680,21 @@ function pullPlotsFromLoad() {
     }
 }
 
+//When workbench opens, this is called
+function loadStory() {
+    deleteAllPlots();
+
+    for (let i = app.stage.children.length; i > 0; i--) {
+        app.stage.removeChild(app.stage.children[0]);
+    }
+
+    loadPlotList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY))[storyIndex]['innerPlots'] || [];
+    log(loadPlotList[storyIndex]['innerPlots']);
+
+    pullPlotsFromLoad();
+    setPreview();
+}
+
 //!Modify to save to the proper allStories index
 function save() {
     log(plotList);
@@ -694,6 +710,10 @@ function save() {
 
     //log(JSON.stringify(arr));
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY, JSON.stringify(arr));
+
+    initAllStories();
+    allStories[storyIndex].innerPlots = arr;
+
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
 
     loadFromSave();
@@ -702,7 +722,7 @@ function save() {
 function downloadSave() {
     save();
 
-    download('save', localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY));
+    download(`save- ${allStories[storyIndex]['name']}`, localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_KEY));
 }
 
 function download(filename, text) {
@@ -766,15 +786,17 @@ function initAllStories() {
     allStories = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY)) || [];
 
     let grid = document.querySelector('#story-grid');
-    grid.innerHTML = '';
 
     if (grid != null) {
+        grid.innerHTML = '';
         allStories.forEach(element => {
-            log(element.innerPlots);
+            log(element.name);
 
-            grid.innerHTML += `<a id = ${element.name} class = 'storyBlock' href="html/editStory.html" onclick="storySelected(id);">${element.name}</a>`;
+            grid.innerHTML += `<a id = '${element.name}' class = 'storyBlock' onclick="storySelected(id);" href="html/editStory.html" >${element.name}</a>`;
         });
     }
+
+    storyIndex = (localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_LIST_INDEX_KEY)) || -999;
 }
 
 function nameStory() {
@@ -801,7 +823,7 @@ function createStory(sName, fillPlots) {
     }
 
     let grid = document.querySelector('#story-grid');
-    grid.innerHTML += `<a id = ${sName} class = 'storyBlock' href="html/editStory.html" onclick="storySelected(id);">${sName}</a>`;
+    grid.innerHTML += `<a id = ${sName} class = 'storyBlock' onclick="storySelected(id);" href="html/editStory.html">${sName}</a>`;
 
     if (fillPlots == [] || fillPlots == null) {
         allStories.push({ name: sName, innerPlots: [] });
@@ -823,6 +845,8 @@ function deleteStory(id) {
 }
 
 function storySelected(id) {
+    initAllStories();
+
     log(id);
     let sIndex = storyIndexFromName(id);
 

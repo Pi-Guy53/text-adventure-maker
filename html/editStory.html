@@ -33,7 +33,7 @@
         <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
         <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
 
-        <input type="submit" class="btn" id="load" name="load" value="Load" onclick="loadFromSave()">
+        <input type="submit" class="btn" id="load" name="load" value="Reset to last Save" onclick="loadFromSave()">
         <a id="back2Main" class="btn" href="../index.html">Back to Story Select</a>
 
         <a id="toPreview" href="showStory.html">To story preview</a>
@@ -93,6 +93,11 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
 
     <script src="../js/Plot.js"></script>
     <script src="../js/main.js"></script>
+
+    <script>
+        initAllStories();
+        loadStory();
+    </script>
 
 </body>
 
