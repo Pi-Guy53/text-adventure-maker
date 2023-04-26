@@ -510,9 +510,11 @@ function setPreview() {
         plotList[i].sprite.tint = 0xffffff;
     }
 
-    plotList[0].sprite.tint = 0xffff00;
+    if (plotList[0] != null) {
+        plotList[0].sprite.tint = 0xffff00;
+        showNewPlot(plotList[0].id);
+    }
 
-    showNewPlot(plotList[0].id); //!NEED TO MAKE DYNAMIC
     drawAllLines();
 }
 
@@ -689,7 +691,7 @@ function loadStory() {
     }
 
     loadPlotList = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY))[storyIndex]['innerPlots'] || [];
-    log(loadPlotList[storyIndex]['innerPlots']);
+    log(loadPlotList);
 
     pullPlotsFromLoad();
     setPreview();

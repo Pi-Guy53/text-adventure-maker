@@ -31,6 +31,10 @@ main {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
+img {
+    border: 1px solid black;
+}
+
 .btn {
     margin: 1rem;
     background-color: hsl(var(--tan-200));
