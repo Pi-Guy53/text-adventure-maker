@@ -40,6 +40,7 @@ if (modalDialog != null) {
 
             tPlot.text = modalD.value; //set the inner text to what the user typed
             let txt = modalD.value;
+            tPlot.text = tPlot.text.replaceAll(/href/ig, '');
 
             log('~~~~~check');
 
