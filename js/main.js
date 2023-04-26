@@ -536,19 +536,19 @@ function drawConnectingLine(a, b) {
         line.moveTo(a.x + (s * 10), a.y);
 
         //draw to center
-        line.lineTo(a.x + (s * 10), a.y + (vd / 2));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
+        line.lineTo(a.x + (s * 10), a.y + (vd / 2) + (s * 5));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
 
         //draw arrow
         line.lineStyle(3, 0x336633);
-        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd + 15) / 2));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
-        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd - 15) / 2));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2));
+        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd + 15) / 2)+ (s * 5));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
+        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd - 15) / 2)+(s * 5));
+        line.lineTo(a.x + (hd / 2), a.y + (vd / 2)+ (s * 5));
         line.lineStyle(3, 0x003300);
 
         //draw to end
-        line.lineTo(a.x + hd, a.y + (vd / 2));
+        line.lineTo(a.x + hd, a.y + (vd / 2)+ (s * 5));
         line.lineTo(a.x + hd, a.y + vd);
 
         lineArr.push(line);
