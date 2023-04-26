@@ -1,3 +1,7 @@
-* Add context menu to main Index page for adding, editing, duplicating, and deleting stories
-* Update Styling on main index page
 * check for bugs 
+* Make sure only one plot moves when a plot is being moved
+* Make drawn lines to-from on seperate y hights
+* Add context menu to main Index page for adding, editing, duplicating, and deleting stories
+* Feedback on saving a file
+* Invalid name change feedback
+* Update Styling on main index page

@@ -325,6 +325,7 @@ function renderPlots() {
 //ContextMenu functions
 function showContextMenu(posX, posY, plotId) {
     contextPlotId = plotId;
+    log(plotId);
 
     const hiddenContextMenu = document.querySelector('.context-wrapper-hidden');
     if (hiddenContextMenu != null) {
