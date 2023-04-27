@@ -89,6 +89,8 @@ img {
 
     padding: 5px;
     text-align: center;
+
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -111,7 +113,17 @@ img {
 
     padding: .5rem;
 
+    color: black;
     background-color: hsl(var(--tan-600));
+}
+
+#toPreview:hover {
+    background-color: hsl(var(--tan-400));
+    cursor: alias;
+}
+
+#back2Main:hover {
+    cursor: alias;
 }
 
 #help {
@@ -300,6 +312,10 @@ img {
     padding: 0;
     margin: auto;
     margin-bottom: 1rem;
+}
+
+#text-wrapper h3 {
+    text-align: center;
 }
 
 #text-title {

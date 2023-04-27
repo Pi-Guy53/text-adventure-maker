@@ -33,10 +33,10 @@
         <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
         <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
 
-        <input type="submit" class="btn" id="load" name="load" value="Reset to last Save" onclick="loadFromSave()">
         <a id="back2Main" class="btn" href="../index.html">Back to Story Select</a>
+        <input type="submit" class="btn" id="load" name="load" value="Reset to last Save" onclick="loadFromSave()">
 
-        <a id="toPreview" href="showStory.html">Play Story</a>
+        <a class="btn" id="toPreview" href="showStory.html">Play Story</a>
 
         <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save(true)">
         <input type="submit" class="btn" id="download" name="download" value="Download save" onclick="downloadSave()">
@@ -84,6 +84,7 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
         </div>
 
         <div id="text-wrapper">
+            <h3>{] Story Preview [}</h3>
             <h1 id="text-title"> Header</h1>
             <p id="text-content">
                 Content
