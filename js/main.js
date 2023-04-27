@@ -188,28 +188,27 @@ function addPlot(inputText, inputId) {
     app.stage.addChild(plotS);
 
     plotS.addEventListener("mouseup", (e) => {
-            if(!plotS.dragging)
-            {
-                modalDialog.className = "modalDialog";
-                tempPlotID = e.target.id;
+        if (!plotS.dragging) {
+            modalDialog.className = "modalDialog";
+            tempPlotID = e.target.id;
 
-                let modalD = document.querySelector('#modalText');
-                let modalTitle = document.querySelector('#modalTitle');
+            let modalD = document.querySelector('#modalText');
+            let modalTitle = document.querySelector('#modalTitle');
 
-                let tPlot = findPlotByID(tempPlotID);
+            let tPlot = findPlotByID(tempPlotID);
 
-                for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
-                    plotList[i].sprite.tint = 0xffffff;
-                }
-
-                tPlot.sprite.tint = 0xaaaaaa;
-
-                modalD.value = tPlot.text;
-                modalTitle.value = tPlot.id;
+            for (let i = 0; i < plotList.length; i++) { //removes the tint for all plots
+                plotList[i].sprite.tint = 0xffffff;
             }
 
-            plotS.dragging = false;
-            mouseDown = false;
+            tPlot.sprite.tint = 0xaaaaaa;
+
+            modalD.value = tPlot.text;
+            modalTitle.value = tPlot.id;
+        }
+
+        plotS.dragging = false;
+        mouseDown = false;
     });
 
     plotS.addEventListener("rightup", (e) => {
@@ -230,8 +229,8 @@ function addPlot(inputText, inputId) {
         // setTimeout(() => {
         //     if (mouseDown) {
         //         plotS.dragging = true;
-                // app.stage.removeChild(plotS);
-                // app.stage.addChild(plotS);
+        // app.stage.removeChild(plotS);
+        // app.stage.addChild(plotS);
         //     }
         // }, 75);
 
@@ -341,7 +340,7 @@ app.stage.addEventListener('mousemove', (e) => {
     x = e.global.x;
     y = e.global.y;
 
-    if(currentDraggingPlot != null){
+    if (currentDraggingPlot != null) {
         if (mouseDown) { //plotS.dragging
             //console.log(e);
             currentDraggingPlot.x = Math.min(Math.max(e.data.global.x + offsetX, 0), app.view.width);
@@ -353,7 +352,7 @@ app.stage.addEventListener('mousemove', (e) => {
 
             //console.log(e.data.global.y + offsetY, plotS.x, plotS.y);
         }
-        else{
+        else {
             currentDraggingPlot.dragging = false;
         }
     }
@@ -531,24 +530,39 @@ function drawConnectingLine(a, b) {
         let vd = b.y - a.y;
 
         let s = Math.sign(hd);
+        let vs = Math.sign(vd);
 
         line.moveTo(a.x + (s * 10), a.y);
 
-        //draw to center
-        line.lineTo(a.x + (s * 10), a.y + (vd / 2) + (s * 5));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
 
-        //draw arrow
-        line.lineStyle(3, 0x336633);
-        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd + 15) / 2)+ (s * 5));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
-        line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd - 15) / 2)+(s * 5));
-        line.lineTo(a.x + (hd / 2), a.y + (vd / 2)+ (s * 5));
-        line.lineStyle(3, 0x003300);
+        if (Math.abs(a.x - b.x) < 30) {
+            line.lineTo(a.x + (s * 10), a.y + (vd / 2));
 
-        //draw to end
-        line.lineTo(a.x + hd, a.y + (vd / 2)+ (s * 5));
-        line.lineTo(a.x + hd, a.y + vd);
+            line.lineTo(a.x + (s * 10) + 10, a.y + (vd / 2) - (vs * 15));
+            line.lineTo(a.x + (s * 10), a.y + (vd / 2));
+
+            line.lineTo(a.x + (s * 10) - 10, a.y + (vd / 2) - (vs * 15));
+            line.lineTo(a.x + (s * 10), a.y + (vd / 2));
+
+            line.lineTo(a.x + (s * 10), b.y);
+        }
+        else {
+            //draw to center
+            line.lineTo(a.x + (s * 10), a.y + (vd / 2) + (s * 5));
+            line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
+
+            //draw arrow
+            line.lineStyle(3, 0x336633);
+            line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd + 15) / 2) + (s * 5));
+            line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
+            line.lineTo(a.x + ((hd - (s * 15)) / 2), a.y + ((vd - 15) / 2) + (s * 5));
+            line.lineTo(a.x + (hd / 2), a.y + (vd / 2) + (s * 5));
+            line.lineStyle(3, 0x003300);
+
+            //draw to end
+            line.lineTo(a.x + hd, a.y + (vd / 2) + (s * 5));
+            line.lineTo(a.x + hd, a.y + vd);
+        }
 
         lineArr.push(line);
 
@@ -701,7 +715,7 @@ function loadStory() {
 }
 
 //!Modify to save to the proper allStories index
-function save() {
+function save(animate) {
     log(plotList);
 
     let arr = plotList;
@@ -724,13 +738,14 @@ function save() {
 
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
 
-    btnSaveAnim();
+    if (animate == true) {
+        btnSaveAnim();
+    }
 
     loadFromSave();
 }
 
-function btnSaveAnim()
-{
+function btnSaveAnim() {
     let svPop = document.querySelector('.savePopUp-hidden');
     svPop.className = 'savePopUp';
 
@@ -816,7 +831,7 @@ function initAllStories() {
         allStories.forEach(element => {
             log(element.name);
 
-            grid.innerHTML += `<a id = '${element.name}' class = 'storyBlock' onclick="storySelected(id);" href="html/editStory.html" >${element.name}</a>`;
+            grid.innerHTML += `<div class = 'storyBlock'> <a class = "storyBlock-link" id = '${element.name}' onclick="storySelected(id);" href="html/editStory.html" >${element.name}</a> <img class = "storyBlock-delete" src="../img/trash-icon-2.png" onclick = "deleteStory('${element.name}')"> <a class = "storyBlock-play" href="../html/showStory.html"> Play </a> </div>`;
         });
     }
 
@@ -857,6 +872,7 @@ function createStory(sName, fillPlots) {
     }
 
     localStorage.setItem(LOCAL_STORAGE_PLOT_SAVE_ALL_STORIES_KEY, JSON.stringify(allStories));
+    initAllStories();
 }
 
 function deleteStory(id) {

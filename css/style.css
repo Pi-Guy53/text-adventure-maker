@@ -7,6 +7,8 @@
     --tan-600: 34, 44%, 90%;
 
     --background-100: 195 75% 86%;
+
+    --delete-ico: url('../img/trash-icon.ong');
 }
 
 header {
@@ -41,10 +43,59 @@ main {
     border-radius: 5px;
     background-color: hsl(var(--tan-600));
     margin: 1rem;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
 }
 
-.storyBlock:hover {
+.storyBlock-link:hover {
     cursor: pointer;
+    background-color: hsl(var(--tan-400));
+    border-radius: 5px;
+}
+
+.storyBlock-link {
+    grid-column: 1/3;
+    grid-row: 1/3;
+}
+
+.storyBlock-delete {
+    justify-self: end;
+    align-self: flex-end;
+
+    grid-column: 2/3;
+    grid-row: 2/3;
+
+    background-color: hsl(var(--tan-600));
+    border-radius: 10px 0px 4px 0px;
+}
+
+.storyBlock-delete:hover {
+    cursor: url("../img/delete-cursor.png"), pointer;
+    border-radius: 10px 0px 0px 0px;
+    border: 1px solid black;
+
+    background-color: hsl(var(--tan-400));
+}
+
+.storyBlock-play {
+    grid-column: 1/2;
+    grid-row: 2/3;
+
+    justify-self: start;
+    align-self: flex-end;
+
+    background-color: hsl(var(--tan-600));
+    border-radius: 0px 10px 0px 4px;
+    padding: 5px;
+}
+
+.storyBlock-play:hover {
+    cursor: url("../img/play-cursor.png"), pointer;
+    border-radius: 0px 10px 0px 0px;
+    border: 1px solid black;
+
     background-color: hsl(var(--tan-400));
 }
 

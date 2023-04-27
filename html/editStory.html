@@ -38,10 +38,10 @@
 
         <a id="toPreview" href="showStory.html">Play Story</a>
 
-        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save()">
+        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save(true)">
         <input type="submit" class="btn" id="download" name="download" value="Download save" onclick="downloadSave()">
 
-        <p>
+        <p id="help">
             Right click on the lower stage to open your editing menu. <br>
             <img src="../img/tutorial.png" width="200">
         </p>
@@ -106,6 +106,7 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
     <script>
         initAllStories();
         loadStory();
+        save(false);
     </script>
 
 </body>
