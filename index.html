@@ -27,9 +27,10 @@
             onclick="nameStory()">
 
         <div class="save-name-modal-hidden">
-            <input type="text" placeholder="Name your Story..." value="untitled"
-                onkeydown="if (event.keyCode == 13) {createStory(value)}">
+            <input type="text" id="storyName" placeholder="Name your Story..." value="untitled"
+                onkeydown="if (event.keyCode == 13) {createStory()} " onclick="select()">
             <input type="submit" name="cancelNameing" id="cancelNameing" value="Cancel" onclick="cancelStoryNaming()">
+            <input type="submit" name="enterNaming" id="enterNaming" value="Save" onclick="createStory()">
         </div>
 
         <section id="story-grid">

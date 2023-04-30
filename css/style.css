@@ -122,6 +122,7 @@ main {
 
 .newStory:hover {
     background-color: hsl(var(--tan-400));
+    cursor: pointer;
 }
 
 .save-name-modal {
@@ -131,13 +132,45 @@ main {
 
     border: 1px solid black;
     box-shadow: 2px 2px 2px grey;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#storyName {
+    grid-column: 1/3;
+    cursor: text;
+
+    width: 99%;
+    height: 75px;
+
+    font-size: 22pt;
+
+    justify-self: center;
+    margin-top: 3px;
+}
+
+#enterNaming {
+    justify-self: end;
+    background-color: hsl(120, 75%, 50%);
+}
+
+#cancelNameing {
+    justify-self: start;
+    background-color: hsl(0, 750%, 50%);
 }
 
 .save-name-modal input {
-    font-size: 16pt;
+    font-size: 14pt;
     text-align: center;
-    width: 250;
-    height: 75px;
+    width: 80%;
+    height: 30px;
+
+    margin: 1px;
+}
+
+.save-name-modal input:hover {
+    cursor: pointer;
 }
 
 .save-name-modal-hidden {

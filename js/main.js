@@ -218,6 +218,14 @@ function addPlot(inputText, inputId) {
         //console.log(e);
     });
 
+    plotS.addEventListener("mousemove", (e) => {
+        stage.innerHTML += '<style> body{cursor: url("../img/move-edit-cursor.png"), pointer;} </style>';
+    });
+
+    plotS.addEventListener("mouseout", (e) => {
+        stage.innerHTML += '<style> body{cursor: default;} </style>';
+    });
+
     plotS.dragging = false;
 
     plotS.addEventListener("mousedown", function (e) {
@@ -373,6 +381,8 @@ function contextNew(e) {
 
     tPlot.x = x;
     tPlot.y = y;
+
+    setPreview();
 
     hideContextMenu();
 }
@@ -853,12 +863,24 @@ function cancelStoryNaming() {
     }
 }
 
-function createStory(sName, fillPlots) {
+function createStory(fillPlots) {
+    let sName = document.querySelector('#storyName').value;
     log(sName);
 
     let nameModal = document.querySelector('.save-name-modal');
     if (nameModal != null) {
         nameModal.className = "save-name-modal-hidden";
+    }
+
+    if (storyIndexFromName[sName] != -999) {
+        let c = 0;
+        for (let i = 0; i < allStories.length; i++) {
+            if (allStories[i].name.split('-')[0] == sName) {
+                c++;
+            }
+        }
+
+        sName += '-' + c;
     }
 
     let grid = document.querySelector('#story-grid');

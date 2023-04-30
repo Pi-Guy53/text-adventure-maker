@@ -22,79 +22,87 @@
 
     <main>
 
-        <script>let app = new PIXI.Application({
-                width: 1600,
-                height: 900,
-                backgroundColor: 0xc79f6b
-            }); // 16:9 * 100
+        <div id="main-grid">
+            <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
+            <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
 
-            app.view.id = "stage"; document.body.appendChild(app.view); </script>
+            <a id="back2Main" class="btn" href="../index.html">Back to Story Select</a>
+            <input type="submit" class="btn" id="load" name="load" value="Reset to last Save" onclick="loadFromSave()">
 
-        <!-- <input type="submit" class="btn" id="newPlot" name="newPlot" value="[+] Create new Plot" onclick="addPlot()"> -->
-        <!-- <input type="submit" class="btn" id="preview" name="preview" value="Compile preview" onclick="setPreview()"> -->
+            <a class="btn" id="toPreview" href="showStory.html">Play Story</a>
 
-        <a id="back2Main" class="btn" href="../index.html">Back to Story Select</a>
-        <input type="submit" class="btn" id="load" name="load" value="Reset to last Save" onclick="loadFromSave()">
+            <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save(true)">
+            <input type="submit" class="btn" id="download" name="download" value="Download save"
+                onclick="downloadSave()">
 
-        <a class="btn" id="toPreview" href="showStory.html">Play Story</a>
+            <p id="help">
+                Right click on the lower stage to open your editing menu. <br>
+                <img src="../img/tutorial.png" width="200">
+            </p>
 
-        <input type="submit" class="btn" id="save" name="save" value="Save" onclick="save(true)">
-        <input type="submit" class="btn" id="download" name="download" value="Download save" onclick="downloadSave()">
+            <div class="modalDialog">
+                <!-- <p id="modalTitle"></p> -->
+                <input type="text" id="modalTitle" name="modalTitle" value=""
+                    placeholder="Title, used for selecting plots, cannot be empty, must be unique" onclick="select()">
 
-        <p id="help">
-            Right click on the lower stage to open your editing menu. <br>
-            <img src="../img/tutorial.png" width="200">
-        </p>
-
-        <div class="modalDialog">
-            <!-- <p id="modalTitle"></p> -->
-            <input type="text" id="modalTitle" name="modalTitle" value=""
-                placeholder="Title, used for selecting plots, cannot be empty, must be unique" onclick="select()">
-
-            <textarea id="modalText" name="modalText" rows="25" placeholder="write some text...
+                <textarea id="modalText" name="modalText" rows="25" placeholder="write some text...
 using <<display text::plot title>> will allow you to create a link between plots.
 clicking the 'display text' will take to user to the plot titled 'plot title' 
 <<, >>, and :: are reserved character configurations (subject to change)"></textarea>
-            <input type="button" id="modalButton-save" name="modalButton-save" value="Save and Close">
-            <input type="button" id="modalButton-cancel" name="modalButton-cancel" value="Close without saving">
+                <input type="button" id="modalButton-save" name="modalButton-save" value="Save and Close">
+                <input type="button" id="modalButton-cancel" name="modalButton-cancel" value="Close without saving">
 
-        </div>
-
-        <div class="savePopUp-hidden">
-            Saved
-        </div>
-
-        <div class="context-wrapper-hidden">
-            <div class="context-content">
-                <ul class="context-menu">
-                    <li class="context-menu-item">
-                        <div onclick="contextNew(event)">New</div>
-                    </li>
-                    <li class="context-menu-item">
-                        <div onclick="contextDuplicate()">Duplicate</div>
-                    </li>
-                    <li class="context-menu-item">
-                        <div onclick="contextEdit()">Edit</div>
-                    </li>
-                    <li class="context-menu-item">
-                        <div onclick="contextDelete()">Delete</div>
-                    </li>
-                </ul>
             </div>
+
+            <div class="savePopUp-hidden">
+                Saved
+            </div>
+
+            <div class="context-wrapper-hidden">
+                <div class="context-content">
+                    <ul class="context-menu">
+                        <li class="context-menu-item">
+                            <div onclick="contextNew(event)">New</div>
+                        </li>
+                        <li class="context-menu-item">
+                            <div onclick="contextDuplicate()">Duplicate</div>
+                        </li>
+                        <li class="context-menu-item">
+                            <div onclick="contextEdit()">Edit</div>
+                        </li>
+                        <li class="context-menu-item">
+                            <div onclick="contextDelete()">Delete</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="text-wrapper">
+                <h3>{] Story Preview [}</h3>
+                <h1 id="text-title"> Header</h1>
+                <p id="text-content">
+                    Content
+                </p>
+            </div>
+
+            <input id="dropzone" type="file" accept=".plothole" value="Drop save files here" onchange="droppedFile()">
+            <p class='dropzone-error-hidden'> <br> <span></span></p>
+            <p id="dropzone-overlay">Drop a previously saved file here to load</p>
+
         </div>
 
-        <div id="text-wrapper">
-            <h3>{] Story Preview [}</h3>
-            <h1 id="text-title"> Header</h1>
-            <p id="text-content">
-                Content
-            </p>
+        <div title="Right click to open the edit menu">
+            <script>
+                let app = new PIXI.Application({
+                    width: 1600,
+                    height: 900,
+                    backgroundColor: 0xc79f6b
+                }); // 16:9 * 100
+
+                app.view.id = "stage";
+                document.body.appendChild(app.view);
+            </script>
         </div>
-
-        <input id="dropzone" type="file" accept=".plothole" value="Drop save files here" onchange="droppedFile()">
-        <p class='dropzone-error-hidden'> <br> <span></span></p>
-        <p id="dropzone-overlay">Drop a previously saved file here to load</p>
-
     </main>
 
     <footer>
