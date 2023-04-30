@@ -219,7 +219,7 @@ function addPlot(inputText, inputId) {
     });
 
     plotS.addEventListener("mousemove", (e) => {
-        stage.innerHTML += '<style> body{cursor: url("../img/move-edit-cursor.png"), pointer;} </style>';
+        stage.innerHTML += '<style> body{cursor: url("../img/move-edit-cursor-v2.png"), pointer;} </style>';
     });
 
     plotS.addEventListener("mouseout", (e) => {

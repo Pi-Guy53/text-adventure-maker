@@ -91,6 +91,8 @@ img {
     text-align: center;
 
     text-decoration: none;
+
+    cursor: pointer;
 }
 
 .btn:hover {
@@ -119,11 +121,11 @@ img {
 
 #toPreview:hover {
     background-color: hsl(var(--tan-400));
-    cursor: alias;
+    /* cursor: alias; */
 }
 
 #back2Main:hover {
-    cursor: alias;
+    /* cursor: alias; */
 }
 
 #help {

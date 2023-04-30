@@ -91,18 +91,17 @@ clicking the 'display text' will take to user to the plot titled 'plot title'
 
         </div>
 
-        <div title="Right click to open the edit menu">
-            <script>
-                let app = new PIXI.Application({
-                    width: 1600,
-                    height: 900,
-                    backgroundColor: 0xc79f6b
-                }); // 16:9 * 100
+        <script>
+            let app = new PIXI.Application({
+                width: 1600,
+                height: 900,
+                backgroundColor: 0xc79f6b
+            }); // 16:9 * 100
 
-                app.view.id = "stage";
-                document.body.appendChild(app.view);
-            </script>
-        </div>
+            app.view.id = "stage";
+            document.body.appendChild(app.view);
+            app.view.title = "Right click to open the edit menu";
+        </script>
     </main>
 
     <footer>

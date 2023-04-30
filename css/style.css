@@ -102,7 +102,9 @@ main {
 }
 
 .storyBlock-play:hover {
-    cursor: url("../img/play-cursor.png"), pointer;
+    cursor:
+        /*url("../img/play-cursor.png"),*/
+        pointer;
     border-radius: 0px 10px 0px 0px;
     border: 1px solid black;
 
