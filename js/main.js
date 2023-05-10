@@ -42,7 +42,13 @@ if (modalDialog != null) {
 
             tPlot.text = modalD.value; //set the inner text to what the user typed
             let txt = modalD.value;
-            tPlot.text = tPlot.text.replaceAll(/href/ig, '');
+            // tPlot.text = tPlot.text.replaceAll(/href/ig, '');
+
+            let result = tPlot.text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+            result = result.replaceAll("&lt;&lt;", "<<").replaceAll("&gt;&gt;", ">>");
+            tPlot.text = result;
+
+            console.log(tPlot.text);
 
             log('~~~~~check');
 
